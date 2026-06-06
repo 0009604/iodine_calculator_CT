@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iodine Calculator</title>
+    <style>
+        /* STILI MODERNI, SFUMATURE E 3D */
+        :root {
+            --primary: #007AFF; 
+            --primary-grad: linear-gradient(180deg, #3295FF 0%, #007AFF 100%);
+            --bg-grad: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            --surface: #FFFFFF; 
+            --text-main: #1C1C1E;
+            --text-sec: #8E8E93;
+            --danger-grad: linear-gradient(180deg, #FF6961 0%, #FF3B30 100%);
+            --radius: 16px;
+            --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --shadow: 0 8px 24px rgba(0,0,0,0.06);
+            --btn-shadow: 0 4px 12px rgba(0, 122, 255, 0.3), inset 0 1px 1px rgba(255,255,255,0.3);
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg-grad);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #app-container {
+            width: 100%;
+            max-width: 420px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(245,245,248,0.9) 100%);
+            backdrop-filter: blur(10px);
+            height: 100%;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* BARRA DI PROGRESSIONE */
+        #progress-container {
+            width: 100%;
+            height: 6px;
+            background: #E5E5EA;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            display: none;
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--primary-grad);
+            transition: width 0.4s ease-out;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .screen { 
+            display: none; 
+            padding: 30px 20px; 
+            text-align: center; 
+            height: 100%; 
+            flex-direction: column;
+            overflow-y: auto;
+            box-sizing: border-box;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .screen.active { display: flex; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2, h3 { margin-top: 10px; color: var(--text-main); font-weight: 700; }
+        h2 { font-size: 1.5rem; margin-bottom: 25px; text-shadow: 0px 1px 2px rgba(0,0,0,0.05); }
+        p.subtitle { color: var(--text-sec); font-size: 0.9rem; margin-top: -15px; margin-bottom: 25px; }
+
+        /* PULSANTI E INPUT 3D */
+        button {
+            background: var(--primary-grad);
+            color: white;
+            border: none;
+            padding: 16px;
+            margin: 8px 0;
+            border-radius: var(--radius);
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.2s;
+            box-shadow: var(--btn-shadow);
+        }
+        button:active { transform: translateY(2px); box-shadow: 0 2px 6px rgba(0, 122, 255, 0.2); }
+        
+        button.secondary-btn {
+            background: linear-gradient(180deg, #FFFFFF 0%, #F2F2F7 100%);
+            color: var(--primary);
+            border: 1px solid #D1D1D6;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,1);
+        }
+        button.secondary-btn:active { transform: translateY(2px); box-shadow: none; }
+        
+        button.back-btn { 
+            background: transparent; 
+            color: var(--text-sec); 
+            box-shadow: none; 
+            margin-top: auto; 
+            padding: 10px;
+        }
+        button.danger-btn {
+            background: var(--danger-grad);
+            box-shadow: 0 4px 12px rgba(255, 59, 48, 0.3), inset 0 1px 1px rgba(255,255,255,0.3);
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        /* SELETTORE SESSO */
+        .gender-container {
+            display: flex; gap: 10px; margin-bottom: 15px;
+        }
+        .gender-btn {
+            background: linear-gradient(180deg, #FFFFFF 0%, #F2F2F7 100%);
+            color: var(--text-main);
+            border: 2px solid #E5E5EA;
+            box-shadow: none;
+            font-size: 1.1rem;
+        }
+        .gender-btn.selected {
+            background: linear-gradient(135deg,#2563EB,#3B82F6) !important;
+            color: white !important;
+            border-color:#2563EB !important;
+            box-shadow:0 10px 25px rgba(37,99,235,.35);
+            transform:scale(1.03);
+        }
+
+        /* STILI INPUT E FRECCE GIGANTI */
+        input, select {
+            width: 100%;
+            padding: 16px;
+            margin: 8px 0;
+            border: 2px solid #D1D1D6;
+            border-radius: var(--radius);
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #FAFAFA;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: #FFF;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+        }
+        
+        /* Frecce selettori numerici più grandi */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button {  
+           opacity: 1;
+           height: 40px; 
+           width: 30px;
+           cursor: pointer;
+        }
+
+        /* CARD IMMAGINI (Per Body/CTA e Distretti) */
+        .img-card {
+            background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%);
+            border: 2px solid #E5E5EA;
+            border-radius: var(--radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+        .img-card:active { transform: scale(0.96); border-color: var(--primary); }
+        .img-card img {
+            width: 80px; 
+            height: 80px; 
+            object-fit: contain;
+            mix-blend-mode: multiply;
+        }
+        .img-card span { font-weight: 600; font-size: 14px; color: var(--text-main); }
+
+        .grid-distretti {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .grid-distretti .full-width { grid-column: span 2; }
+
+        /* SCHERMATA SPLASH */
+        #screen-splash { 
+            justify-content: center; 
+        }
+        #screen-splash img.logo { 
+            width: 180px; 
+            margin: 0 auto 30px auto; 
+            mix-blend-mode: multiply;
+            animation: pulse 2s infinite alternate;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.1)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0px 15px 15px rgba(0,0,0,0.15)); }
+        }
+
+        /* RISULTATI */
+        .result-box { 
+            background: linear-gradient(180deg, #FFFFFF 0%, #F2F2F7 100%);
+            padding: 25px; 
+            border-radius: var(--radius); 
+            margin: 20px 0; 
+            text-align: left;
+            border: 1px solid #D1D1D6;
+            box-shadow: var(--shadow);
+        }
+        .result-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 1.1rem;}
+        .result-item span:last-child { font-weight: bold; color: var(--primary); }
+        .highlight { 
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            color: var(--primary); 
+            text-align: center; 
+            margin-top: 20px; 
+            padding-top: 20px; 
+            border-top: 2px solid #E5E5EA;
+        }
+
+        /* MODAL BIBLIO & EXPLANATION */
+        #modal-biblio {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 100;
+            padding: 20px; box-sizing: border-box; justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: var(--surface); padding: 25px; border-radius: var(--radius);
+            max-height: 85%; overflow-y: auto; text-align: left; font-size: 13px; color: var(--text-main);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); width: 100%;
+            line-height: 1.5;
+        }
+        .modal-content h3 { color: var(--primary); margin-top: 20px; border-bottom: 1px solid #eee; padding-bottom: 5px;}
+        .modal-content p.ref { margin-bottom: 8px; font-size: 12px; color: var(--text-sec); }
+        .modal-content p.text-block { margin-bottom: 15px; }
+
+        /* ROI COLORI PASTELLO */
+        .roi-azzurro { background-color: #E0F2FE !important; border-color: #BAE6FD !important; }
+        .roi-rosso { background-color: #FEE2E2 !important; border-color: #FECACA !important; }
+        .roi-verde { background-color: #DCFCE7 !important; border-color: #BBF7D0 !important; }
+
+        .eta-label { display: block; text-align: left; font-size: 0.85rem; color: var(--primary); margin-top: -5px; margin-bottom: 15px; margin-left: 5px; font-weight: 600;}
+        .input-label { text-align: left; font-weight: 600; font-size: 0.9rem; margin-top: 10px; margin-left: 5px; color: var(--text-sec); }
+    
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root{
+ --primary:#2563EB !important;
+ --font:'Inter',sans-serif !important;
+}
+
+body{
+ background:
+ radial-gradient(circle at top left, rgba(37,99,235,.12), transparent 35%),
+ radial-gradient(circle at bottom right, rgba(99,102,241,.10), transparent 40%),
+ linear-gradient(180deg,#F8FAFC 0%,#EEF2F7 100%) !important;
+}
+
+body::before{
+ content:'';
+ position:fixed;
+ width:280px;height:280px;
+ border-radius:50%;
+ background:rgba(37,99,235,.12);
+ filter:blur(80px);
+ top:-120px;left:-120px;
+ z-index:-1;
+}
+
+body::after{
+ content:'';
+ position:fixed;
+ width:320px;height:320px;
+ border-radius:50%;
+ background:rgba(99,102,241,.10);
+ filter:blur(100px);
+ bottom:-150px;right:-120px;
+ z-index:-1;
+}
+
+#app-container{
+ background:rgba(255,255,255,.72)!important;
+ backdrop-filter:blur(24px)!important;
+ -webkit-backdrop-filter:blur(24px)!important;
+ border:1px solid rgba(255,255,255,.45);
+ box-shadow:0 20px 60px rgba(0,0,0,.08),0 2px 10px rgba(0,0,0,.04)!important;
+}
+
+button{
+ background:#2563EB!important;
+ border-radius:18px!important;
+ box-shadow:0 8px 24px rgba(37,99,235,.18)!important;
+ transition:all .25s ease!important;
+}
+
+button:hover{
+ transform:translateY(-2px);
+ box-shadow:0 16px 32px rgba(37,99,235,.22)!important;
+}
+
+button:active{
+ transform:scale(.98);
+}
+
+.secondary-btn,.gender-btn{
+ background:rgba(255,255,255,.75)!important;
+ backdrop-filter:blur(12px);
+ color:#2563EB!important;
+ border:1px solid rgba(37,99,235,.15)!important;
+}
+
+.img-card{
+ background:rgba(255,255,255,.75)!important;
+ backdrop-filter:blur(12px);
+ border:1px solid rgba(255,255,255,.5)!important;
+ border-radius:22px!important;
+ box-shadow:0 10px 30px rgba(0,0,0,.05)!important;
+ transition:all .25s ease!important;
+}
+
+.img-card:hover{
+ transform:translateY(-4px);
+ box-shadow:0 20px 40px rgba(0,0,0,.08)!important;
+}
+
+input,select{
+ border-radius:18px!important;
+ background:rgba(255,255,255,.8)!important;
+}
+
+.result-box{
+ background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(99,102,241,.04))!important;
+ border:1px solid rgba(37,99,235,.15)!important;
+ border-radius:24px!important;
+}
+
+.highlight{
+ font-size:2.2rem!important;
+ letter-spacing:-1px;
+}
+
+#progress-bar{
+ background:linear-gradient(90deg,#2563EB,#3B82F6,#60A5FA)!important;
+}
+
+</style>
+</head>
+<body>
+
+<div id="app-container">
+    
+    <div id="progress-container"><div id="progress-bar"></div></div>
+
+    <div id="screen-splash" class="screen active">
+        <img src="LOGO.png" alt="Logo" class="logo" onerror="this.style.display='none'">
+        <h1>IODINE CALCULATOR</h1>
+        <p class="subtitle">Suggeritore di M.D.C. Iodato</p>
+        
+        <button style="margin-top: 40px;" onclick="nav('screen-tipo-esame', 10)">INIZIA</button>
+        <button class="secondary-btn" onclick="document.getElementById('modal-biblio').style.display='flex'">❓ Riferimenti & Funzionamento</button>
+    </div>
+
+    <div id="screen-tipo-esame" class="screen">
+        <h2>Esame da eseguire</h2>
+        <div class="grid-2">
+            <div class="img-card" onclick="alert('CTA: Work in progress!')">
+                <img src="cta.png" alt="CTA" onerror="this.style.display='none'">
+                <span>CTA</span>
+            </div>
+            <div class="img-card" onclick="nav('screen-distretto', 20)">
+                <img src="bpdy.png" alt="BODY" onerror="this.style.display='none'">
+                <span>BODY</span>
+            </div>
+        </div>
+        <button class="back-btn" onclick="nav('screen-splash', 0)">Torna Indietro</button>
+    </div>
+
+    <div id="screen-distretto" class="screen">
+        <h2>Che distretto indaghi?</h2>
+        <div class="grid-distretti">
+            <div class="img-card" onclick="setDati('distretto', 'Stadiazione'); nav('screen-concentrazione', 35)">
+                <img src="STADIAZIONE.png" alt="Stadiazione" onerror="this.style.display='none'">
+                <span>STADIAZIONE</span>
+            </div>
+            <div class="img-card" onclick="setDati('distretto', 'Addome'); nav('screen-concentrazione', 35)">
+                <img src="ADDOME.png" alt="Addome" onerror="this.style.display='none'">
+                <span>ADDOME</span>
+            </div>
+            <div class="img-card" onclick="setDati('distretto', 'Torace'); nav('screen-concentrazione', 35)">
+                <img src="TORACE.png" alt="Torace" onerror="this.style.display='none'">
+                <span>TORACE</span>
+            </div>
+            <div class="img-card" onclick="setDati('distretto', 'Cranio'); nav('screen-concentrazione', 35)">
+                <img src="CRANIO.png" alt="Cranio" onerror="this.style.display='none'">
+                <span>CRANIO</span>
+            </div>
+            <div class="img-card full-width" onclick="setDati('distretto', 'Collo'); nav('screen-concentrazione', 35)">
+                <img src="COLLO.png" alt="Collo" onerror="this.style.display='none'">
+                <span>COLLO</span>
+            </div>
+        </div>
+        <button class="back-btn" onclick="nav('screen-tipo-esame', 10)">Torna Indietro</button>
+    </div>
+
+    <div id="screen-concentrazione" class="screen">
+        <h2>Concentrazione MDC</h2>
+        <p class="subtitle">Seleziona i mgI/ml</p>
+        <div class="grid-2">
+            <button class="secondary-btn" onclick="setDati('concentrazione', 320); nav('screen-flusso', 50)">320</button>
+            <button class="secondary-btn" onclick="setDati('concentrazione', 350); nav('screen-flusso', 50)">350</button>
+            <button class="secondary-btn" onclick="setDati('concentrazione', 370); nav('screen-flusso', 50)">370</button>
+            <button class="secondary-btn" onclick="setDati('concentrazione', 400); nav('screen-flusso', 50)">400</button>
+        </div>
+        <div style="margin-top: 15px;">
+            <input type="number" id="input-conc" placeholder="Altro (es. 250-450)" min="250" max="450">
+            <button onclick="checkCustomConc()">Conferma Personalizzato</button>
+        </div>
+        <button class="back-btn" onclick="nav('screen-distretto', 20)">Torna Indietro</button>
+    </div>
+
+    <div id="screen-flusso" class="screen">
+        <h2>Flusso impostato</h2>
+        <p class="subtitle">Seleziona i ml/s sull'iniettore</p>
+        <div class="grid-2">
+            <button class="secondary-btn" onclick="setDati('flusso', 2.5); nav('screen-paziente-1', 65)">2.5</button>
+            <button class="secondary-btn" onclick="setDati('flusso', 3.0); nav('screen-paziente-1', 65)">3.0</button>
+            <button class="secondary-btn" onclick="setDati('flusso', 4.0); nav('screen-paziente-1', 65)">4.0</button>
+            <button class="secondary-btn" onclick="setDati('flusso', 4.5); nav('screen-paziente-1', 65)">4.5</button>
+            <button class="secondary-btn" onclick="setDati('flusso', 5.0); nav('screen-paziente-1', 65)">5.0</button>
+        </div>
+        <div style="margin-top: 15px;">
+            <input type="number" step="0.1" id="input-flusso" placeholder="Altro (es. 3.5)" min="1.5" max="6.0">
+            <button onclick="checkCustomFlusso()">Conferma Personalizzato</button>
+        </div>
+        <button class="back-btn" onclick="nav('screen-concentrazione', 35)">Torna Indietro</button>
+    </div>
+
+    <div id="screen-paziente-1" class="screen">
+        <h2>Dati Paziente (1/2)</h2>
+        
+        <div class="input-label" style="margin-top:0;">Sesso (Obbligatorio)</div>
+        <div class="gender-container">
+            <button type="button" id="btn-sesso-m" class="gender-btn" onclick="selezionaSesso('M')">♂ Maschio</button>
+            <button type="button" id="btn-sesso-f" class="gender-btn" onclick="selezionaSesso('F')">♀ Femmina</button>
+        </div>
+        
+        <div class="input-label">Peso in Kg (Formula di Boer)</div>
+        <input type="number" id="peso" value="70">
+        
+        <div class="input-label">Altezza in cm (Formula di Boer)</div>
+        <input type="number" id="altezza" value="170">
+
+        <button id="btn-avanti-p1" style="margin-top: 20px;" onclick="savePaziente1()" disabled>Avanti</button>
+        <button class="back-btn" onclick="nav('screen-flusso', 50)">Torna Indietro</button>
+    </div>
+
+    <div id="screen-paziente-2" class="screen">
+        <h2>Dati Paziente (2/2)</h2>
+        
+        <div class="input-label" style="margin-top:0;">Anno di Nascita</div>
+        <input type="number" id="anno" placeholder="Es. 1950" oninput="calcolaEtaLive()">
+        <span class="eta-label" id="eta-calc">Età calcolata: -- anni</span>
+
+        <div class="input-label">Frequenza Cardiaca (BPM) - Opzionale</div>
+        <input type="number" id="fc" value="70">
+        
+        <button style="margin-top: 20px;" onclick="savePaziente2()">Avanti</button>
+        <button class="back-btn" onclick="nav('screen-paziente-1', 65)">Torna Indietro</button>
+    </div>
+
+    <div id="screen-mod-scan" class="screen">
+        <h2>Modalità Scansione</h2>
+        <button class="secondary-btn" style="padding: 25px;" onclick="setDati('scansione', 'SECT'); nav('screen-mod-ric', 90)">SECT<br><small style="font-weight:normal">(Single Energy CT)</small></button>
+        <button class="secondary-btn" style="padding: 25px;" onclick="setDati('scansione', 'DECT'); nav('screen-mod-ric', 90)">DECT<br><small style="font-weight:normal">(Dual Energy CT → in fase venosa)</small></button>
+        <button class="back-btn" onclick="nav('screen-paziente-2', 80)">Torna Indietro</button>
+    </div>
+
+    <div id="screen-mod-ric" class="screen">
+        <h2>Modalità Ricostruzione</h2>
+        <button class="secondary-btn" style="padding: 20px;" onclick="setDati('ricostruzione', 'HIR'); calcolaTutto()">
+            Iterative (HIR)<br>
+            <small style="font-weight:normal; font-size:11px; line-height:1.2; display:block; margin-top:5px; color:var(--text-sec);">ASIR-V, SAFIRE, ADMIRE, iDose, AIDR 3D, FIRST, IMR, Veo</small>
+        </button>
+        <button class="secondary-btn" style="padding: 20px;" onclick="setDati('ricostruzione', 'DLR'); calcolaTutto()">
+            Deep Learning (DLR)<br>
+            <small style="font-weight:normal; font-size:11px; line-height:1.2; display:block; margin-top:5px; color:var(--text-sec);">DLIR, Deep Resolve, AiCE, Precise Image</small>
+        </button>
+        <button class="back-btn" onclick="nav('screen-mod-scan', 90)">Torna Indietro</button>
+    </div>
+
+    <div id="screen-output" class="screen">
+        <h2>Risultato Calcolo</h2>
+        
+        <div class="result-box">
+            <div class="result-item"><span>Massa Magra (LBW)</span> <span id="out-lbw">-- kg</span></div>
+            <div class="result-item"><span>IDR</span> <span id="out-idr">-- gI/s</span></div>
+            <div class="result-item"><span>Iodio Totale</span> <span id="out-tot">-- g</span></div>
+            <div class="highlight" id="out-stringa">-- ml x -- ml/s</div>
+        </div>
+
+        <h3 style="margin-top: 20px; font-size:1.1rem;">Hai eseguito l'esame?</h3>
+        <button onclick="nav('screen-roi', 100)">SI, inserisci ROI</button>
+        <button class="danger-btn" onclick="nav('screen-splash', 0)">NO, stavo solo provando</button>
+    </div>
+
+    <div id="screen-roi" class="screen">
+        <h2>Inserimento ROI</h2>
+        <p class="subtitle">Campi opzionali per l'analisi</p>
+        
+        <input type="number" id="roi-feg-bas-m" class="roi-azzurro" placeholder="ROI Fegato Basale (Media HU)">
+        <input type="number" id="roi-feg-bas-sd" class="roi-azzurro" placeholder="ROI Fegato Basale (Deviazione Standard, SD)">
+        
+        <input type="number" id="roi-aorta" class="roi-rosso" placeholder="ROI Aorta al tripode (HU)">
+        
+        <input type="number" id="roi-feg-ven" class="roi-verde" placeholder="ROI Fegato Venosa (Media HU)">
+        
+        <button style="margin-top:20px;" onclick="inviaDati(true)">SALVA IN GOOGLE SHEETS</button>
+        <button class="back-btn" onclick="inviaDati(false)">Ignora e Torna alla Home</button>
+    </div>
+
+</div>
+
+<div id="modal-biblio">
+    <div class="modal-content">
+        <h2 style="margin-top:0; color:var(--text-main)">Riferimenti Bibliografici</h2>
+        <p class="ref">1. ACR Committee on Drugs and Contrast Media. ACR Manual on Contrast Media. 2025. <i>(Linee Guida)</i></p>
+        <p class="ref">2. Choi B, et al. Risk of Contrast-Induced Acute Kidney Injury... Investigative Radiology. 2025. <i>(Studio Retrospettivo di Coorte)</i></p>
+        <p class="ref">3. Clement O, et al. Contrast media safety... European Radiology. 2024. <i>(Revisione Sistematica e Linee Guida)</i></p>
+        <p class="ref">4. Gulizia M, et al. Adjustments of iodinated contrast media using lean body weight... Eur J Radiol. 2024. <i>(Studio Clinico)</i></p>
+        <p class="ref">5. Gulizia M, et al. Contrast Volume Reduction in Oncologic Body Imaging... Diagnostics. 2025. <i>(Studio Osservazionale)</i></p>
+        <p class="ref">6. Li W, et al. Reducing both radiation and contrast doses... Eur J Radiol. 2023. <i>(Studio Prospettico)</i></p>
+        <p class="ref">7. Planken RN, et al. The impact of individualized CT contrast media protocols... Clinical Radiology. 2026. <i>(Studio Clinico Randomizzato)</i></p>
+        <p class="ref">8. Rengier F, et al. Thoughts on sustainability... RöFo. 2024. <i>(Review / Editoriale)</i></p>
+        <p class="ref">9. van der Molen AJ, et al. Waiting times between examinations... European Radiology. 2024. <i>(Consensus / Linee Guida)</i></p>
+        <p class="ref">10. Walgraeve MS, et al. Implementation of patient-tailored contrast volumes... Eur J Radiol. 2019. <i>(Studio di Implementazione Clinica)</i></p>
+        <p class="ref">11. Yap LPP, et al. Customised weight-based volume... Singapore Medical Journal. 2024. <i>(Studio Retrospettivo)</i></p>
+
+        <h3>Come agisce il calcolatore</h3>
+        
+        <p class="text-block"><b>Conversione in mL Fisici:</b><br>
+        Converte il carico di iodio teorico (mgI) in millilitri (mL) fisici da impostare sull'iniettore. È fondamentale per standardizzare l'Iodine Delivery Rate (IDR). Mantenere una "spinta" di iodio costante garantisce un enhancement vascolare uniforme indipendentemente dal prodotto commerciale usato (es. 300, 350, 370 o 400 mgI/mL).</p>
+
+        <p class="text-block"><b>Massa Magra (LBW Formula di Boer):</b><br>
+        Seleziona la formula di Boer specifica per il calcolo della LBW e il relativo target di iodio. Le donne presentano generalmente un volume ematico relativo inferiore rispetto agli uomini. Per questo, il calcolatore imposta un target di iodio leggermente superiore nelle femmine per armonizzare l'enhancement tra i generi. Sono le variabili fondamentali per la Formula di Boer che calcola la Massa Magra (Lean Body Weight). Il mdc iodato è idrosolubile e si distribuisce quasi esclusivamente nel volume extracellulare della massa magra; il grasso, essendo scarsamente vascolarizzato, contribuisce pochissimo alla diluizione del mdc. Usare la LBW invece del peso totale (TBW) evita il sovradosaggio nei pazienti obesi e riduce il rischio di nefrotossicità (CI-AKI).</p>
+
+        <p class="text-block"><b>Parametro di Sicurezza ed Età:</b><br>
+        Agisce come parametro di sicurezza per il profilo farmacocinetico. Con l'avanzare dell'età, l'emivita di eliminazione del mdc aumenta a causa del declino fisiologico della funzione renale. Questo dato è cruciale per determinare i tempi di attesa corretti tra esami ripetuti (fino a 48 ore o più in pazienti anziani con eGFR ridotto) per evitare accumuli tossici.</p>
+
+        <p class="text-block"><b>Target di Iodio Specifico:</b><br>
+        Imposta il Target di Iodio specifico (mgI/kgLBW) necessario per quel distretto clinico e il flusso consigliato. Ogni esame ha un obiettivo di opacizzazione diverso (es. >50 HU per la fase portale del fegato o >250 HU per le Angio-TC). Il calcolatore utilizza target derivati dalla letteratura (Kondo & Matsumoto) per garantire che ogni organo riceva la dose minima efficace per la diagnosi.</p>
+
+        <p class="text-block"><b>Correzione Emodinamica e Tabella di Walgraeve:</b><br>
+        Applica una correzione emodinamica aumentando il volume del +10% e riducendo il flusso di -0,5 mL/s. In presenza di insufficienza cardiaca o frazione d'eiezione (FE) ridotta, il mdc si diluisce in un volume ematico centrale dilatato. Aumentare il volume compensa la diluizione, mentre ridurre il flusso allunga la durata del bolo, garantendo che il contrasto sia ancora in fase di somministrazione quando inizia la scansione in circoli rallentati. Applica la Tabella di Walgraeve per una correzione dinamica del volume: la gittata cardiaca influenza il "washout" del contrasto. Circoli veloci (>80 BPM) richiedono un aumento di volume per mantenere un enhancement costante, mentre in circoli lenti (<55 BPM) è possibile sottrarre volume (fino a -10 mL) risparmiando iodio senza perdere qualità diagnostica.</p>
+
+        <p class="text-block"><b>Sconto Fisico e Tecnologie DECT:</b><br>
+        Applica uno "sconto" fisico diretto basato sulla capacità di ricostruire immagini monoenergetiche virtuali. La tecnologia DECT (Dual Energy) permette di generare ricostruzioni a bassi keV (es. 55 keV) che si avvicinano al "K-edge" dello iodio (33 keV). A queste energie, l'attenuazione dello iodio aumenta drasticamente, permettendo una riduzione del volume di contrasto.</p>
+
+        <p class="text-block"><b>Sinergia kVp, Ricostruzione e Deep Learning:</b><br>
+        È il moltiplicatore dinamico che combina la tensione del tubo con la capacità della ricostruzione di gestire il rumore. <i>Auto-kVp + Iterative (Baseline):</i> rappresenta il punto di riferimento. Le ricostruzioni iterative standard (HIR) permettono una gestione moderata del rumore ma hanno limiti qualitativi intrinseci. <i>Low-kVp + DLIR (Massima Efficienza):</i> riducendo la tensione (es. a 80 kVp), il segnale dello iodio aumenta, ma aumenta anche il rumore. La sinergia con il Deep Learning (DLR) è fondamentale: l'IA "pulisce" l'immagine dai disturbi elettronici tipici dei bassi voltaggi, permettendo riduzioni del carico di iodio senza degradare la nitidezza dei bordi o la qualità diagnostica. Definisce la qualità della "pulizia" del rumore e la precisione del segnale nelle fasi arteriose e venose. Gli algoritmi DLR superano i limiti delle vecchie tecniche iterative, che spesso creano un aspetto "artificiale" se spinte troppo oltre. La DLR utilizza reti neurali profonde con milioni di parametri addestrati su dati di alta qualità, garantendo un rapporto segnale-rumore (SNR) e un contrasto-rumore (CNR) significativamente più alti anche con flussi di iodio ridotti.</p>
+
+        <button class="danger-btn" style="margin-top:15px;" onclick="document.getElementById('modal-biblio').style.display='none'">Chiudi</button>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // CONFIGURAZIONE
+    // ==========================================
+    const CONFIG = {
+        til: { Stadiazione: 720, Addome: 670, Torace: 450, Cranio: 400, Collo: 430 },
+        sconti: { 'SECT-HIR': 1.0, 'SECT-DLR': 0.95, 'DECT-HIR': 0.90, 'DECT-DLR': 0.85 },
+        fcCorrezione: function(fc) {
+            if (!fc) return 0;
+            if (fc < 60) return -7;
+            if (fc >= 60 && fc <= 70) return 0;
+            if (fc > 70 && fc <= 80) return 5;
+            if (fc > 80) return 7;
+            return 0;
+        },
+        distrettiCardiaci: ["Torace", "Addome", "Stadiazione"],
+        googleScriptURL: "https://script.google.com/macros/s/AKfycbyYG9TV_rk-DHbBLI-rbmq4emxyRFobM_AnJFjNScYb2PydPRD78w04LySqYQtiLFrWdA/exec"
+    };
+
+    let sessionData = { sesso: null };
+
+    // NAVIGAZIONE
+    function nav(targetId, progress) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(targetId).classList.add('active');
+        
+        let progContainer = document.getElementById('progress-container');
+        let progBar = document.getElementById('progress-bar');
+        
+        if(progress > 0 && progress < 100) {
+            progContainer.style.display = 'block';
+            setTimeout(() => progBar.style.width = progress + '%', 50);
+        } else {
+            progContainer.style.display = 'none';
+            progBar.style.width = '0%';
+        }
+    }
+
+    function setDati(chiave, valore) { sessionData[chiave] = valore; }
+
+    // VALIDAZIONI CUSTOM
+    function checkCustomConc() {
+        let val = parseInt(document.getElementById('input-conc').value);
+        if (val >= 250 && val <= 450) { setDati('concentrazione', val); nav('screen-flusso', 50); }
+        else alert('Inserisci un valore valido tra 250 e 450');
+    }
+    function checkCustomFlusso() {
+        let val = parseFloat(document.getElementById('input-flusso').value);
+        if (val >= 1.5 && val <= 6.0) { setDati('flusso', val); nav('screen-paziente-1', 65); }
+        else alert('Inserisci un flusso valido tra 1.5 e 6.0');
+    }
+
+    // GESTIONE SESSO E PAZIENTE 1
+    function selezionaSesso(s) {
+        sessionData.sesso = s;
+        document.getElementById('btn-sesso-m').classList.remove('selected');
+        document.getElementById('btn-sesso-f').classList.remove('selected');
+        document.getElementById('btn-sesso-' + s.toLowerCase()).classList.add('selected');
+        document.getElementById('btn-avanti-p1').disabled = false;
+    }
+
+    function savePaziente1() {
+
+        if (sessionData.sesso !== 'M' && sessionData.sesso !== 'F') {
+            alert('Seleziona il sesso del paziente prima di continuare.');
+            return;
+        }
+
+        let p = parseFloat(document.getElementById('peso').value);
+        let a = parseFloat(document.getElementById('altezza').value);
+
+        if (!p || !a || p < 20 || a < 100) {
+            alert('Compila correttamente peso e altezza');
+            return;
+        }
+
+        setDati('peso', p);
+        setDati('altezza', a);
+
+        nav('screen-paziente-2', 80);
+    }
+
+    // GESTIONE ETA E PAZIENTE 2
+    function calcolaEtaLive() {
+        let annoInput = document.getElementById('anno').value;
+        let anno = parseInt(annoInput);
+        if (annoInput.length === 4 && anno > 1900 && anno <= new Date().getFullYear()) {
+            let eta = new Date().getFullYear() - anno;
+            document.getElementById('eta-calc').innerText = `Età calcolata: ${eta} anni`;
+        } else {
+            document.getElementById('eta-calc').innerText = `Età calcolata: -- anni`;
+        }
+    }
+
+    function savePaziente2() {
+        let anno = parseInt(document.getElementById('anno').value);
+        let fc = parseInt(document.getElementById('fc').value);
+        
+        if (!anno || anno < 1900 || anno > new Date().getFullYear()) return alert('Inserisci un anno di nascita valido');
+        
+        setDati('anno', anno);
+        setDati('eta', new Date().getFullYear() - anno);
+        setDati('fc', fc || null);
+        nav('screen-mod-scan', 90);
+    }
+
+    // CALCOLO FINALE
+    function calcolaTutto() {
+        let lbw = sessionData.sesso === 'M' 
+            ? (0.407 * sessionData.peso) + (0.267 * sessionData.altezza) - 19.2
+            : (0.252 * sessionData.peso) + (0.473 * sessionData.altezza) - 48.3;
+        sessionData.lbw = lbw;
+
+        let tilTarget = CONFIG.til[sessionData.distretto];
+        let volumeBase = (lbw * tilTarget) / sessionData.concentrazione;
+        let chiaveSconto = sessionData.scansione + '-' + sessionData.ricostruzione;
+        let volumeScontato = volumeBase * CONFIG.sconti[chiaveSconto];
+
+        let correzione = CONFIG.distrettiCardiaci.includes(sessionData.distretto) ? CONFIG.fcCorrezione(sessionData.fc) : 0;
+        let volumeFinale = Math.ceil(volumeScontato + correzione);
+        sessionData.volume = volumeFinale;
+
+        let idr = (sessionData.concentrazione * sessionData.flusso) / 1000;
+        sessionData.idr = idr;
+        let iodioTotale = (volumeFinale * sessionData.concentrazione) / 1000;
+        sessionData.iodioTot = iodioTotale;
+
+        document.getElementById('out-lbw').innerText = lbw.toFixed(1) + " kg";
+        document.getElementById('out-idr').innerText = idr.toFixed(2) + " gI/s";
+        document.getElementById('out-tot').innerText = iodioTotale.toFixed(1) + " g";
+        document.getElementById('out-stringa').innerText = `${volumeFinale} ml × ${sessionData.flusso} ml/s`;
+
+        nav('screen-output', 100);
+    }
+
+    // INVIO DATI GOOGLE SHEETS
+    function inviaDati(salvaSuSheet) {
+        if (!salvaSuSheet) { location.reload(); return; }
+        
+        sessionData.roiFegBasM = document.getElementById('roi-feg-bas-m').value || "";
+        sessionData.roiFegBasSd = document.getElementById('roi-feg-bas-sd').value || "";
+        sessionData.roiAorta = document.getElementById('roi-aorta').value || "";
+        sessionData.roiFegVen = document.getElementById('roi-feg-ven').value || "";
+        sessionData.dataEsame = new Date().toLocaleDateString('it-IT');
+
+        if(CONFIG.googleScriptURL === "INSERISCI_QUI_IL_TUO_URL_DI_GOOGLE_SCRIPT") {
+            alert("URL Google Script mancante. Torno alla home.");
+            location.reload(); return;
+        }
+
+        let btn = document.querySelector('#screen-roi button');
+        btn.innerText = "Salvataggio in corso...";
+        btn.disabled = true;
+
+        fetch(CONFIG.googleScriptURL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(sessionData)
+        }).then(() => {
+            alert("Dati salvati con successo!");
+            location.reload();
+        }).catch(() => {
+            alert("Errore nel salvataggio. Riprova.");
+            btn.innerText = "SALVA IN GOOGLE SHEETS";
+            btn.disabled = false;
+        });
+    }
+</script>
+</body>
+</html>

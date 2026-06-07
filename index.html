@@ -31,11 +31,6 @@
             -webkit-user-select: none;
         }
 
-        img {
-            background-color: transparent !important;
-            background: transparent !important;
-        }
-
         body {
             margin: 0;
             padding: 0;
@@ -59,7 +54,7 @@
             display: flex;
             flex-direction: column;
             border: 1px solid rgba(255,255,255,0.05);
-            padding: 24px 20px 40px 20px; /* Incrementato spazio inferiore di sicurezza */
+            padding: 24px 20px 40px 20px;
         }
 
         .screen {
@@ -104,7 +99,6 @@
             letter-spacing: 2px;
         }
 
-        /* ANIMAZIONE LOGO HOME PAGE */
         @keyframes slowPulse {
             0% { transform: scale(1); filter: drop-shadow(0 0 12px var(--glow)); }
             100% { transform: scale(1.04); filter: drop-shadow(0 0 20px rgba(0,212,170,0.4)); }
@@ -114,22 +108,18 @@
             animation: slowPulse 4s infinite alternate ease-in-out;
         }
 
-        /* FLOATING INFO BUTTON (BIBLIOGRAFIA) */
         .info-btn-floating {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 36px;
-            height: 36px;
-            background: var(--card);
+            width: 38px;
+            height: 38px;
+            background: var(--bg3);
             border: 1px solid var(--border);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            z-index: 50;
-            box-shadow: 0 0 8px var(--glow);
+            box-shadow: 0 0 10px var(--glow);
+            font-size: 16px;
         }
 
         .btn-panel {
@@ -142,7 +132,6 @@
             align-items: center;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .btn-panel:active {
@@ -163,7 +152,6 @@
             font-size: 22px;
             font-weight: 700;
             color: #fff;
-            letter-spacing: 0.5px;
         }
 
         .input-row {
@@ -213,7 +201,7 @@
         }
 
         .counter-value {
-            width: 60px;
+            width: 65px;
             text-align: center;
             font-family: 'Rajdhani', sans-serif;
             font-size: 20px;
@@ -221,7 +209,27 @@
             color: #fff;
         }
 
-        /* CAMPO DI INPUT DIRETTO TESTUALE/NUMERICO STILE CLAUDE */
+        /* INPUT EDITABILI DIRETTAMENTE NEI CONTATORI MDC */
+        .counter-editable-input {
+            width: 65px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px dashed var(--accent);
+            text-align: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 19px;
+            font-weight: 700;
+            color: #fff;
+            outline: none;
+            padding: 2px 0;
+            user-select: text !important;
+            -webkit-user-select: text !important;
+        }
+        .counter-editable-input:focus {
+            border-bottom: 1px solid var(--accent);
+            background: rgba(0,212,170,0.05);
+        }
+
         .text-input-field {
             background: rgba(0,0,0,0.3);
             border: 1px solid rgba(255,255,255,0.1);
@@ -233,10 +241,8 @@
             font-weight: 700;
             width: 100px;
             text-align: center;
-        }
-        .text-input-field:focus {
-            border-color: var(--accent);
-            outline: none;
+            user-select: text !important;
+            -webkit-user-select: text !important;
         }
 
         .gender-selector {
@@ -255,7 +261,6 @@
             font-weight: 600;
             text-align: center;
             cursor: pointer;
-            font-size: 15px;
         }
 
         .btn-gender.active {
@@ -290,18 +295,10 @@
             font-size: 16px;
             font-weight: 700;
             color: #fff;
-            margin-bottom: 3px;
         }
 
-        .option-card.active .option-title {
-            color: var(--accent);
-        }
-
-        .option-desc {
-            font-size: 11px;
-            color: var(--dim);
-            line-height: 1.3;
-        }
+        .option-card.active .option-title { color: var(--accent); }
+        .option-desc { font-size: 11px; color: var(--dim); line-height: 1.3; }
 
         .output-box {
             background: rgba(0,212,170,0.05);
@@ -309,7 +306,7 @@
             border-radius: var(--radius);
             padding: 20px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .output-main {
@@ -318,14 +315,9 @@
             font-weight: 700;
             color: var(--accent);
             text-shadow: 0 0 10px var(--glow);
-            margin-bottom: 5px;
         }
 
-        .output-detail {
-            font-size: 14px;
-            color: var(--dim);
-            margin-bottom: 15px;
-        }
+        .output-detail { font-size: 14px; color: var(--dim); margin-bottom: 10px; }
 
         .metric-grid {
             display: grid;
@@ -337,51 +329,49 @@
             background: var(--bg2);
             border: 1px solid rgba(255,255,255,0.05);
             border-radius: 12px;
-            padding: 10px;
+            padding: 12px;
         }
 
-        .metric-label {
-            font-size: 11px;
-            color: var(--dim);
-            text-transform: uppercase;
-        }
+        .metric-label { font-size: 11px; color: var(--dim); text-transform: uppercase; }
+        .metric-val { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: #fff; margin-top: 2px; }
 
-        .metric-val {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: #fff;
-            margin-top: 2px;
-        }
-
-        /* DETTAGLI CAMPI ROI CON PASTELLO TENUE SU TRASPARENZA */
-        .roi-container {
-            background: var(--card);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: var(--radius);
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .roi-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .roi-field-box {
-            border-radius: 8px;
-            padding: 6px;
+        /* NUOVA LISTA FLUIDA VERTICALE PER LE ROI IN REPARTO - PREVIENE OVERFLOW */
+        .roi-flex-list {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 10px;
+            margin-top: 12px;
         }
 
-        /* Sfondi pastello tenui richiesti */
-        .roi-fegato-basale { background: rgba(186, 230, 253, 0.15); border: 1px solid rgba(186, 230, 253, 0.4); }
-        .roi-aorta-tripode { background: rgba(254, 202, 202, 0.15); border: 1px solid rgba(254, 202, 202, 0.4); }
-        .roi-fegato-venosa { background: rgba(187, 247, 208, 0.15); border: 1px solid rgba(187, 247, 208, 0.4); }
+        .roi-field-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 12px;
+            padding: 10px 14px;
+            width: 100%;
+        }
+
+        .roi-fegato-base { background: rgba(186, 230, 253, 0.12); border: 1px solid rgba(186, 230, 253, 0.3); }
+        .roi-aorta-tripode { background: rgba(254, 202, 202, 0.12); border: 1px solid rgba(254, 202, 202, 0.3); }
+        .roi-fegato-venosa { background: rgba(187, 247, 208, 0.12); border: 1px solid rgba(187, 247, 208, 0.3); }
+
+        .roi-input-field {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            color: #fff;
+            padding: 8px;
+            width: 85px;
+            text-align: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            outline: none;
+            user-select: text !important;
+            -webkit-user-select: text !important;
+        }
+        .roi-input-field:focus { border-color: var(--accent); }
 
         .btn-action {
             background: linear-gradient(180deg, #00f2fe 0%, #007aff 100%);
@@ -403,23 +393,25 @@
         .btn-action:active { transform: scale(0.98); }
         .btn-abort { background: linear-gradient(180deg, #ff6b6b 0%, #ff3b30 100%); box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3); }
 
-        /* CONTENITORE DI SICUREZZA PER SMARTPHONE */
         .bottom-nav-container {
             margin-top: auto;
             padding-top: 20px;
             padding-bottom: 10px;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
 
         .btn-home-link {
             text-align: center;
             color: var(--dim);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             cursor: pointer;
-            padding: 12px;
+            padding: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -443,10 +435,12 @@
 <body>
 
     <div id="app-container">
-        
-        <div class="info-btn-floating" onclick="document.getElementById('modal-biblio').style.display='flex'">❓</div>
 
-        <div id="screen-welcome" class="screen active" style="justify-content: center; align-items: center;">
+        <div id="screen-welcome" class="screen active" style="justify-content: center; align-items: center; position: relative;">
+            <div style="position: absolute; top: 0; right: 0;" onclick="document.getElementById('modal-biblio').style.display='flex'">
+                <div class="info-btn-floating">❓</div>
+            </div>
+            
             <div style="text-align: center; margin-bottom: 25px;">
                 <img src="LOGO.png" class="logo" style="width: 140px; height: 140px; object-fit: contain;">
             </div>
@@ -469,7 +463,7 @@
                 <div class="btn-panel-text">CTA</div>
             </div>
 
-            <div class="bottom-nav-container">
+            <div class="bottom-nav-container" style="margin-top: 40px;">
                 <div class="btn-home-link" onclick="nav('screen-welcome')">✕ Annulla ed Esci</div>
             </div>
         </div>
@@ -502,9 +496,9 @@
             <div class="input-row">
                 <div class="input-label">MDC Concentrazione (mgI/ml)</div>
                 <div class="counter-container">
-                    <div class="btn-counter" onclick="passo('concentrazione', -50)">-</div>
-                    <div id="val-concentrazione" class="counter-value">350</div>
-                    <div class="btn-counter" onclick="passo('concentrazione', 50)">+</div>
+                    <div class="btn-counter" onclick="passo('concentrazione', -10)">-</div>
+                    <input type="text" id="val-concentrazione" class="counter-editable-input" value="350" maxlength="3" onblur="validaConcentrazioneManuale(this)" onkeydown="if(event.key==='Enter') this.blur();">
+                    <div class="btn-counter" onclick="passo('concentrazione', 10)">+</div>
                 </div>
             </div>
 
@@ -512,7 +506,7 @@
                 <div class="input-label">Flusso MDC (ml/s)</div>
                 <div class="counter-container">
                     <div class="btn-counter" onclick="passo('flusso', -0.5)">-</div>
-                    <div id="val-flusso" class="counter-value">3.0</div>
+                    <input type="text" id="val-flusso" class="counter-editable-input" value="3,0" onblur="validaFlussoManuale(this)" onkeydown="if(event.key==='Enter') this.blur();">
                     <div class="btn-counter" onclick="passo('flusso', 0.5)">+</div>
                 </div>
             </div>
@@ -536,18 +530,18 @@
             <div class="input-row">
                 <div class="input-label">Peso corporeo (kg)</div>
                 <div class="counter-container">
-                    <div class="btn-counter" onclick="passo('peso', -1)">-</div>
+                    <div class="btn-counter" onmousedown="avviaAutoRipetizione('peso', -1)" onmouseup="fermaAutoRipetizione()" onmouseleave="fermaAutoRipetizione()" ontouchstart="avviaAutoRipetizione('peso', -1)" ontouchend="fermaAutoRipetizione()">-</div>
                     <div id="val-peso" class="counter-value">70</div>
-                    <div class="btn-counter" onclick="passo('peso', 1)">+</div>
+                    <div class="btn-counter" onmousedown="avviaAutoRipetizione('peso', 1)" onmouseup="fermaAutoRipetizione()" onmouseleave="fermaAutoRipetizione()" ontouchstart="avviaAutoRipetizione('peso', 1)" ontouchend="fermaAutoRipetizione()">+</div>
                 </div>
             </div>
 
             <div class="input-row">
                 <div class="input-label">Altezza (cm)</div>
                 <div class="counter-container">
-                    <div class="btn-counter" onclick="passo('altezza', -1)">-</div>
+                    <div class="btn-counter" onmousedown="avviaAutoRipetizione('altezza', -1)" onmouseup="fermaAutoRipetizione()" onmouseleave="fermaAutoRipetizione()" ontouchstart="avviaAutoRipetizione('altezza', -1)" ontouchend="fermaAutoRipetizione()">-</div>
                     <div id="val-altezza" class="counter-value">170</div>
-                    <div class="btn-counter" onclick="passo('altezza', 1)">+</div>
+                    <div class="btn-counter" onmousedown="avviaAutoRipetizione('altezza', 1)" onmouseup="fermaAutoRipetizione()" onmouseleave="fermaAutoRipetizione()" ontouchstart="avviaAutoRipetizione('altezza', 1)" ontouchend="fermaAutoRipetizione()">+</div>
                 </div>
             </div>
 
@@ -623,32 +617,32 @@
                 <div id="out-distretto-target" style="font-size: 12px; color: var(--dim); margin-top: 5px;"></div>
             </div>
 
-            <div class="metric-grid" style="margin-bottom: 20px;">
+            <div class="metric-grid" style="margin-bottom: 15px;">
                 <div class="metric-card"><div class="metric-label">Iodio Totale</div><div id="out-iodio-totale" class="metric-val">-- g</div></div>
-                <div class="metric-card"><div class="metric-label">IDR Teorico</div><div id="out-idr" class="metric-val">-- gI/s</div></div>
-                <div class="metric-card"><div class="metric-label">Massa Magra (LBW)</div><div id="out-lbw" class="metric-val">-- kg</div></div>
-                <div class="metric-card"><div class="metric-label">Volume Nominale</div><div id="out-vol-nominale" class="metric-val">-- ml</div></div>
+                <div class="metric-card"><div class="metric-label">IDR</div><div id="out-idr" class="metric-val">-- gI/s</div></div>
+                <div class="metric-card" style="grid-column: span 2;"><div class="metric-label">Massa Magra (LBW)</div><div id="out-lbw" class="metric-val">-- kg</div></div>
             </div>
 
-            <div id="container-roi-avanzato" style="display: none;">
-                <div class="roi-container">
-                    <h3 style="font-size: 14px; color: var(--accent); margin-bottom: 10px; text-transform: uppercase;">📊 Rilevazioni ROI Post-Esame</h3>
-                    <div class="roi-grid">
-                        <div class="roi-field-box roi-fegato-basale">
-                            <div class="metric-label" style="font-size:9px; color:#0369a1;">Fegato Basale (Media M)</div>
+            <div id="container-roi-avanzato" style="display: none; margin-bottom: 10px;">
+                <div style="background: var(--card); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--radius); padding: 14px;">
+                    <h3 style="font-size: 14px; color: var(--accent); margin-bottom: 5px; text-transform: uppercase;">📊 Rilevazioni ROI Post-Esame</h3>
+                    
+                    <div class="roi-flex-list">
+                        <div class="roi-field-row roi-fegato-base">
+                            <div class="metric-label" style="color:#0284c7; font-weight: 700;">FEGATO BASE (HU)</div>
                             <input type="number" id="roi-feg-bas-m" class="roi-input-field" placeholder="HU">
                         </div>
-                        <div class="roi-field-box roi-fegato-basale">
-                            <div class="metric-label" style="font-size:9px; color:#0369a1;">Fegato Basale (SD)</div>
+                        <div class="roi-field-row roi-fegato-base">
+                            <div class="metric-label" style="color:#0284c7; font-weight: 700;">FEGATO BASALE (SD)</div>
                             <input type="number" id="roi-feg-bas-sd" class="roi-input-field" placeholder="SD">
                         </div>
-                        <div class="roi-field-box roi-aorta-tripode" style="grid-column: span 2;">
-                            <div class="metric-label" style="font-size:9px; color:#b91c1c;">Aorta al Tripode</div>
-                            <input type="number" id="roi-aorta" class="roi-input-field" style="width:100%;" placeholder="HU">
+                        <div class="roi-field-row roi-aorta-tripode">
+                            <div class="metric-label" style="color:#dc2626; font-weight: 700;">AORTA AL TRIPODE (HU)</div>
+                            <input type="number" id="roi-aorta" class="roi-input-field" placeholder="HU">
                         </div>
-                        <div class="roi-field-box roi-fegato-venosa" style="grid-column: span 2;">
-                            <div class="metric-label" style="font-size:9px; color:#15803d;">Fegato Fase Venosa (Media M)</div>
-                            <input type="number" id="roi-feg-ven" class="roi-input-field" style="width:100%;" placeholder="HU">
+                        <div class="roi-field-row roi-fegato-venosa">
+                            <div class="metric-label" style="color:#16a34a; font-weight: 700;">FEGATO VENOSA (HU)</div>
+                            <input type="number" id="roi-feg-ven" class="roi-input-field" placeholder="HU">
                         </div>
                     </div>
                 </div>
@@ -656,11 +650,12 @@
             </div>
 
             <div id="container-roi-standard" style="display: none;">
-                <button class="btn-action btn-abort" onclick="inviaDatiCloud(false)">Termina ed Torna alla Home</button>
+                <button class="btn-action btn-abort" onclick="inviaDatiCloud(false)">Termina ed Esci</button>
             </div>
 
             <div class="bottom-nav-container">
-                <div class="btn-home-link" onclick="nav('screen-tecnica')">⬅️ Rimodula parametri</div>
+                <div class="btn-home-link" style="color: var(--danger);" onclick="location.reload()">✕ Torna al Menu Principale</div>
+                <div class="btn-home-link" onclick="nav('screen-tecnica')">⬅️ Rimodula parametri TC</div>
             </div>
         </div>
 
@@ -669,23 +664,21 @@
     <div id="modal-biblio">
         <div class="modal-content">
             <h2 style="margin-top:0; color:#fff;">Riferimenti & Logica Applicativa</h2>
-            <p style="font-size:11px;">1. ACR Committee on Drugs and Contrast Media. 2025. (Linee Guida)<br>
-            2. Choi B, et al. Risk of Contrast-Induced Acute Kidney Injury... Investig Radiol. 2025. (Studio Coorte)<br>
-            3. Clement O, van der Molen AJ. ESUR Publications. Eur Radiol. 2024. (Linee Guida)<br>
-            4. Gulizia M, et al. Lean Body Weight for abdominopelvic CT. EJR. 2024. (Meta-analisi)<br>
-            5. Gulizia M, et al. Contrast Volume Reduction Using Dual-Energy CT. Diagnostics. 2025. (Studio Clinico)<br>
-            6. Li W, et al. Deep learning image reconstruction and low-kVp. EJR. 2023. (Trial Randomizzato)<br>
-            7. Planken RN, et al. Individualized CT contrast media protocols. Clin Radiol. 2026. (Revisione)<br>
-            8. Rengier F, et al. Sustainability in the use of contrast media. RöFo. 2024. (Review)<br>
-            9. van der Molen AJ, et al. Waiting times between examinations. Eur Radiol. 2024. (Linee Guida Committee)<br>
-            10. Walgraeve MS, et al. Patient-tailored contrast volumes based on BSA and HR. EJR. 2019. (Studio Clinico)</p>
+            <p style="font-size:11px;">1. ACR Committee on Drugs and Contrast Media. 2025.<br>
+            2. Choi B, et al. Investig Radiol. 2025.<br>
+            3. Clement O, van der Molen AJ. ESUR. Eur Radiol. 2024.<br>
+            4. Gulizia M, et al. EJR. 2024.<br>
+            5. Gulizia M, et al. Diagnostics. 2025.<br>
+            6. Li W, et al. EJR. 2023.<br>
+            7. Planken RN, et al. Clin Radiol. 2026.<br>
+            8. Rengier F, et al. Sustainability. RöFo. 2024.<br>
+            9. van der Molen AJ, et al. Eur Radiol. 2024.<br>
+            10. Walgraeve MS, et al. EJR. 2019.</p>
 
             <h3>Fisiologia, Hardware e Tecnologia</h3>
-            <p><b>Conversione in mL:</b> Converte il carico di iodio teorico (mgI) in millilitri fisici impostati sull'iniettore per standardizzare l'Iodine Delivery Rate (IDR). La spinta costante assicura un enhancement uniforme indipendentemente dalle concentrazioni del flacone (300, 350, 400 mgI/mL).</p>
-            <p><b>Lean Body Weight (Boer):</b> Il mezzo di contrasto iodato è idrosolubile, distribuendosi nel compartimento extracellulare della massa magra. Il tessuto adiposo non vascolarizzato influisce minimamente. Basarsi sulla LBW previene il sovradosaggio nell'obesità patologica e controlla la nefrotossicità (CI-AKI).</p>
-            <p><b>Rettifica Frequenza Cardiaca:</b> Implementa la Tabella dinamica di Walgraeve. Elevati flussi emodinamici (>80 BPM) accelerano il washout, richiedendo incrementi di volume (+5/+7mL) per preservare l'altopiano diagnostico. Circoli rallentati (<60 BPM) consentono riduzioni volumetriche risparmiando iodio.</p>
-            <p><b>Sconto Virtual Monoenergetic (DECT):</b> L'acquisizione Dual Energy consente la ricostruzione a bassi keV (es. 50-55 keV) in prossimità del K-edge dello iodio (33.2 keV), incrementando l'attenuazione fotoelettrica e permettendo un abbattimento del volume erogato dal 10% al 15% in combinazione con la DLR.</p>
-            <p><b>Deep Learning (DLR vs HIR):</b> Gli algoritmi con reti neurali profonde abbattono drasticamente il rumore elettronico derivato dai bassi voltaggi di tubo (Low-kVp), eliminando l'aspetto "pixelato/artificiale" delle vecchie HIR e stabilizzando il rapporto contrasto-rumore (CNR) a dosaggi minimi.</p>
+            <p><b>Lean Body Weight (Boer):</b> Il mdc si distribuisce nel compartimento extracellulare della massa magra. Basarsi sulla LBW previene il sovradosaggio nell'obesità controllando il rischio di nefrotossicità (CI-AKI).</p>
+            <p><b>Rettifica Frequenza Cardiaca:</b> Elevati flussi emodinamici (>80 BPM) accelerano il washout, richiedendo incrementi di volume per preservare l'altopiano diagnostico.</p>
+            <p><b>Sconto Virtual Monoenergetic (DECT):</b> L'acquisizione Dual Energy consente la ricostruzione a bassi keV (es. 50-55 keV), incrementando l'attenuazione fotoelettrica dello iodio.</p>
             <button class="btn-action btn-abort" style="margin-top:20px;" onclick="document.getElementById('modal-biblio').style.display='none'">Chiudi Scheda Documentazione</button>
         </div>
     </div>
@@ -706,6 +699,24 @@
             ric: "Iterative"
         };
 
+        // GESTIONE ACCELERAZIONE CONTINUA CONTATORI (LONG-PRESS)
+        let autoRipetizioneTimeout = null;
+        let autoRipetizioneInterval = null;
+
+        function avviaAutoRipetizione(campo, delta) {
+            passo(campo, delta);
+            autoRipetizioneTimeout = setTimeout(() => {
+                autoRipetizioneInterval = setInterval(() => {
+                    passo(campo, delta);
+                }, 70); 
+            }, 350); 
+        }
+
+        function fermaAutoRipetizione() {
+            clearTimeout(autoRipetizioneTimeout);
+            clearInterval(autoRipetizioneInterval);
+        }
+
         function nav(id, delay = 0) {
             setTimeout(() => {
                 document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -721,20 +732,52 @@
                 document.getElementById('val-fc').innerText = S.fc + " BPM";
                 return;
             }
+            if (campo === 'concentrazione') {
+                S.concentrazione += val;
+                if (S.concentrazione < 250) S.concentrazione = 250;
+                if (S.concentrazione > 450) S.concentrazione = 450;
+                document.getElementById('val-concentrazione').value = S.concentrazione;
+                return;
+            }
+            if (campo === 'flusso') {
+                S.flusso += val;
+                if (S.flusso < 1.0) S.flusso = 1.0;
+                if (S.flusso > 8.0) S.flusso = 8.0;
+                document.getElementById('val-flusso').value = S.flusso.toFixed(1).replace('.', ',');
+                return;
+            }
             
             S[campo] += val;
-            
-            if (S.concentrazione < 270) S.concentrazione = 270;
-            if (S.concentrazione > 400) S.concentrazione = 400;
-            if (S.flusso < 1) S.flusso = 1;
-            if (S.flusso > 8) S.flusso = 8;
             if (S.peso < 30) S.peso = 30;
             if (S.altezza < 100) S.altezza = 100;
-            if (S.eta < 1) S.eta = 1;
 
-            let str = S[campo];
-            if (campo === 'flusso') str = S[campo].toFixed(1);
-            document.getElementById(`val-${campo}`).innerText = str;
+            document.getElementById(`val-${campo}`).innerText = S[campo];
+        }
+
+        // VALIDAZIONI RIGIDE PER GLI INSERIMENTI MANUALI IN REPARTO
+        function validaConcentrazioneManuale(el) {
+            let val = parseInt(el.value, 10);
+            if (isNaN(val) || val < 250 || val > 450) {
+                alert("Errore: La concentrazione deve essere un valore intero tra 250 e 450 mgI/ml.");
+                el.value = S.concentrazione;
+            } else {
+                S.concentrazione = val;
+                el.value = val;
+            }
+        }
+
+        function validaFlussoManuale(el) {
+            let testoSenzaVirgola = el.value.trim().replace(',', '.');
+            let parsed = parseFloat(testoSenzaVirgola);
+            let formatoValido = /^\d(\.\d)?$/; 
+
+            if (!formatoValido.test(testoSenzaVirgola) || isNaN(parsed) || parsed < 1.0 || parsed > 8.0) {
+                alert("Errore Flusso: Inserire una cifra singola intera o con un solo decimale (es: 3 o 3.5), tra 1 e 8 ml/s.");
+                el.value = S.flusso.toFixed(1).replace('.', ',');
+            } else {
+                S.flusso = parsed;
+                el.value = testoSenzaVirgola.replace('.', ',');
+            }
         }
 
         function resetFC() {
@@ -759,7 +802,6 @@
             document.getElementById(`gender-${v}`).classList.add('active');
         }
 
-        // RISOLTO IL BUG DELLE SELEZIONI INCROCIATE NELLE CARD OPZIONI
         function setScan(v) {
             S.scan = v;
             document.querySelectorAll('#container-scan-group .option-card').forEach(c => c.classList.remove('active'));
@@ -778,14 +820,12 @@
         }
 
         function elaboraAlgoritmo() {
-            // Formula Clinica Matematica di Boer per LBW
             S.lbw = (S.sesso === "M") 
                 ? (0.407 * S.peso) + (0.267 * S.altezza) - 19.2
                 : (0.252 * S.peso) + (0.473 * S.altezza) - 48.3;
 
             let tilTarget = CONFIG.tilParametri[S.distretto] || 600; 
             let volumeMdcLBW = (tilTarget * S.lbw) / S.concentrazione;
-            let volumeNominale = (tilTarget * S.peso) / S.concentrazione;
 
             let chiaveSconto = `${S.scan}_${S.ric}`;
             let fattoreSconto = CONFIG.scontiTecnologici[chiaveSconto] || 1.0;
@@ -802,14 +842,12 @@
             S.idr = (S.flusso * S.concentrazione) / 1000;
             S.iodio = (S.volume * S.concentrazione) / 1000;
 
-            document.getElementById('out-stringa-iniettore').innerText = `${S.volume} ml × ${S.flusso} ml/s`;
+            document.getElementById('out-stringa-iniettore').innerText = `${S.volume} ml × ${S.flusso.toFixed(1).replace('.', ',')} ml/s`;
             document.getElementById('out-distretto-target').innerText = `Target Anatomico: ${S.distretto}`;
             document.getElementById('out-iodio-totale').innerText = `${S.iodio.toFixed(1)} g`;
             document.getElementById('out-idr').innerText = `${S.idr.toFixed(2)} gI/s`;
             document.getElementById('out-lbw').innerText = `${S.lbw.toFixed(1)} kg`;
-            document.getElementById('out-vol-nominale').innerText = `${Math.round(volumeNominale)} ml`;
 
-            // Mostra selettivamente ROI solo su ADDOME o STADIAZIONE
             if (S.distretto === "ADDOME" || S.distretto === "STADIAZIONE") {
                 document.getElementById('container-roi-avanzato').style.display = "block";
                 document.getElementById('container-roi-standard').style.display = "none";
@@ -821,16 +859,34 @@
             nav('screen-output', 100);
         }
 
+        // SISTEMA DI BLOCCO DI SICUREZZA E CALCOLO ENHANCEMENT EPATICO LIVE
         function inviaDatiCloud(richiedeSalvataggioDati) {
             if (!richiedeSalvataggioDati) {
                 location.reload(); 
                 return;
             }
 
-            S.roiFegBasM = document.getElementById('roi-feg-bas-m').value || "";
-            S.roiFegBasSd = document.getElementById('roi-feg-bas-sd').value || "";
-            S.roiAorta = document.getElementById('roi-aorta').value || "";
-            S.roiFegVen = document.getElementById('roi-feg-ven').value || "";
+            let valFegBaseM = document.getElementById('roi-feg-bas-m').value.trim();
+            let valFegBaseSd = document.getElementById('roi-feg-bas-sd').value.trim();
+            let valAorta = document.getElementById('roi-aorta').value.trim();
+            let valFegVen = document.getElementById('roi-feg-ven').value.trim();
+
+            // Blocco di sicurezza invalicabile se manca anche un solo valore
+            if (valFegBaseM === "" || valFegBaseSd === "" || valAorta === "" || valFegVen === "") {
+                alert("Impossibile procedere: compilare tutti e 4 i campi delle letture ROI prima di poter salvare l'esame.");
+                return;
+            }
+
+            S.roiFegBasM = valFegBaseM;
+            S.roiFegBasSd = valFegBaseSd;
+            S.roiAorta = valAorta;
+            S.roiFegVen = valFegVen;
+
+            // Calcolo dell'Enhancement Epatico richiesto (Fase Venosa - Fase Base)
+            let fegatoVenosaFl = parseFloat(valFegVen);
+            let fegatoBaseFl = parseFloat(valFegBaseM);
+            S.enhancementEpatico = (!isNaN(fegatoVenosaFl) && !isNaN(fegatoBaseFl)) ? (fegatoVenosaFl - fegatoBaseFl).toFixed(1) : "";
+
             S.dataEsame = new Date().toLocaleDateString('it-IT');
 
             let activeBtn = document.querySelector('#container-roi-avanzato .btn-action');
@@ -843,15 +899,15 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(S)
             }).then(() => {
-                alert("Dati clinici salvati su Google Fogli!");
+                alert("Dati clinici ed Enhancement Epatico salvati con successo!");
                 location.reload();
             }).catch(() => {
-                alert("Errore di rete nell'invio cloud.");
-                location.reload();
+                alert("Errore di trasmissione verso il server Google Fogli.");
+                activeBtn.innerText = "Invia e Salva nel Database 💾";
+                activeBtn.disabled = false;
             });
         }
         
-        // Esegui calcolo età all'avvio iniziale
         calcolaEtaLive();
     </script>
 </body>

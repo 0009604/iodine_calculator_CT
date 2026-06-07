@@ -99,14 +99,21 @@
             letter-spacing: 2px;
         }
 
-        @keyframes slowPulse {
-            0% { transform: scale(1); filter: drop-shadow(0 0 12px var(--glow)); }
-            100% { transform: scale(1.04); filter: drop-shadow(0 0 20px rgba(0,212,170,0.4)); }
+        /* --- STILI HARDWARE EASTER EGG CROSSOVER --- */
+        .welcome-logo-wrapper { position: relative; display: flex; justify-content: center; align-items: center; width: 160px; height: 160px; margin-bottom: 25px; }
+        @keyframes radar-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .radar-sweep {
+            position: absolute; width: 170px; height: 170px; border-radius: 50%;
+            background: conic-gradient(rgba(0,212,170,0.8) 0deg, transparent 70deg, transparent 360deg);
+            z-index: 15; pointer-events: none; opacity: 0; transition: opacity 0.3s;
         }
-
-        #screen-welcome img.logo {
-            animation: slowPulse 4s infinite alternate ease-in-out;
-        }
+        .is-scanning .radar-sweep { opacity: 1; animation: radar-spin 0.8s linear infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(1); opacity: 1; border-width: 5px; } 100% { transform: scale(3.2); opacity: 0; border-width: 1px; } }
+        .ring { position: absolute; border: 2px solid #00d4aa; border-radius: 50%; width: 150px; height: 150px; pointer-events: none; opacity: 0; box-shadow: 0 0 20px #00d4aa, inset 0 0 15px #00d4aa; }
+        .logo-finto { transition: opacity 0.4s, transform 0.4s, filter 0.4s; cursor: pointer; }
+        .is-dissolving { opacity: 0; transform: scale(1.15) translateY(-15px); pointer-events: none; filter: blur(5px); }
+        @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; color: #fff; filter: drop-shadow(0 0 5px #00d4aa); } 100% { transform: translateY(var(--distY)) scale(var(--s)); opacity: 0; color: #00d4aa; filter: drop-shadow(0 0 12px #00d4aa); } }
+        .data-bit { position: absolute; font-family: 'Rajdhani', monospace; font-weight: 700; font-size: 14px; pointer-events: none; z-index: 20; text-shadow: 0 0 8px rgba(0,212,170,0.8); animation: floatUp var(--dur) ease-in forwards; white-space: nowrap; }
 
         .info-btn-floating {
             width: 38px;
@@ -196,19 +203,8 @@
             touch-action: manipulation;
         }
 
-        .btn-counter:active {
-            background: var(--accent);
-            color: var(--bg);
-        }
-
-        .counter-value {
-            width: 65px;
-            text-align: center;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: #fff;
-        }
+        .btn-counter:active { background: var(--accent); color: var(--bg); }
+        .counter-value { width: 65px; text-align: center; font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; color: #fff; }
 
         .counter-editable-input {
             width: 65px;
@@ -225,208 +221,55 @@
             user-select: text !important;
             -webkit-user-select: text !important;
         }
-        .counter-editable-input:focus {
-            border-bottom: 1px solid var(--accent);
-            background: rgba(0,212,170,0.05);
-        }
+        .counter-editable-input:focus { border-bottom: 1px solid var(--accent); background: rgba(0,212,170,0.05); }
+        .text-input-field { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; width: 100px; text-align: center; user-select: text !important; -webkit-user-select: text !important; }
 
-        .text-input-field {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 12px;
-            color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            width: 100px;
-            text-align: center;
-            user-select: text !important;
-            -webkit-user-select: text !important;
-        }
+        .gender-selector { display: flex; gap: 10px; margin-bottom: 15px; }
+        .btn-gender { flex: 1; background: var(--card); border: 1px solid rgba(255,255,255,0.05); padding: 14px; border-radius: var(--radius); color: var(--dim); font-weight: 600; text-align: center; cursor: pointer; }
+        .btn-gender.active { background: rgba(0,212,170,0.15); border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px var(--glow); }
 
-        .gender-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .btn-gender {
-            flex: 1;
-            background: var(--card);
-            border: 1px solid rgba(255,255,255,0.05);
-            padding: 14px;
-            border-radius: var(--radius);
-            color: var(--dim);
-            font-weight: 600;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .btn-gender.active {
-            background: rgba(0,212,170,0.15);
-            border-color: var(--accent);
-            color: var(--accent);
-            box-shadow: 0 0 10px var(--glow);
-        }
-
-        .option-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .option-card {
-            background: var(--card);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: var(--radius);
-            padding: 14px;
-            cursor: pointer;
-        }
-
-        .option-card.active {
-            border-color: var(--accent) !important;
-            background: rgba(0,212,170,0.08) !important;
-        }
-
-        .option-title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            color: #fff;
-        }
-
+        .option-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        .option-card { background: var(--card); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--radius); padding: 14px; cursor: pointer; }
+        .option-card.active { border-color: var(--accent) !important; background: rgba(0,212,170,0.08) !important; }
+        .option-title { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; color: #fff; }
         .option-card.active .option-title { color: var(--accent); }
         .option-desc { font-size: 11px; color: var(--dim); line-height: 1.3; }
 
-        .output-box {
-            background: rgba(0,212,170,0.05);
-            border: 1px dashed var(--accent);
-            border-radius: var(--radius);
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 15px;
-        }
+        /* Sotto-gruppi per selezione KV / KEV */
+        .sub-option-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
+        .btn-sub-param { background: var(--bg2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 5px; text-align: center; font-family: 'Rajdhani', sans-serif; font-weight: 700; color: var(--dim); cursor: pointer; font-size: 15px; }
+        .btn-sub-param.active { background: rgba(0,212,170,0.2); border-color: var(--accent); color: #fff; box-shadow: 0 0 8px var(--glow); }
 
-        .output-main {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--accent);
-            text-shadow: 0 0 10px var(--glow);
-        }
-
+        .output-box { background: rgba(0,212,170,0.05); border: 1px dashed var(--accent); border-radius: var(--radius); padding: 20px; text-align: center; margin-bottom: 15px; }
+        .output-main { font-family: 'Rajdhani', sans-serif; font-size: 30px; font-weight: 700; color: var(--accent); text-shadow: 0 0 10px var(--glow); line-height: 1.2; }
         .output-detail { font-size: 14px; color: var(--dim); margin-bottom: 10px; }
 
-        .metric-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .metric-card {
-            background: var(--bg2);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 12px;
-        }
-
+        .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .metric-card { background: var(--bg2); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; }
         .metric-label { font-size: 11px; color: var(--dim); text-transform: uppercase; }
         .metric-val { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: #fff; margin-top: 2px; }
 
-        .roi-flex-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 12px;
-        }
+        /* Badge semaforico IDR */
+        .badge-idr { display: inline-block; padding: 4px 10px; border-radius: 6px; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 16px; margin-top: 4px; }
 
-        .roi-field-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-radius: 12px;
-            padding: 10px 14px;
-            width: 100%;
-        }
-
+        .roi-flex-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+        .roi-field-row { display: flex; align-items: center; justify-content: space-between; border-radius: 12px; padding: 10px 14px; width: 100%; }
         .roi-fegato-base { background: rgba(186, 230, 253, 0.12); border: 1px solid rgba(186, 230, 253, 0.3); }
         .roi-aorta-tripode { background: rgba(254, 202, 202, 0.12); border: 1px solid rgba(254, 202, 202, 0.3); }
         .roi-fegato-venosa { background: rgba(187, 247, 208, 0.12); border: 1px solid rgba(187, 247, 208, 0.3); }
 
-        .roi-input-field {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 8px;
-            color: #fff;
-            padding: 8px;
-            width: 85px;
-            text-align: center;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            outline: none;
-            user-select: text !important;
-            -webkit-user-select: text !important;
-        }
+        .roi-input-field { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; padding: 8px; width: 85px; text-align: center; font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; outline: none; user-select: text !important; -webkit-user-select: text !important; }
         .roi-input-field:focus { border-color: var(--accent); }
 
-        .btn-action {
-            background: linear-gradient(180deg, #00f2fe 0%, #007aff 100%);
-            border: none;
-            padding: 16px;
-            border-radius: var(--radius);
-            color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
-            width: 100%;
-            margin-top: 15px;
-        }
-
+        .btn-action { background: linear-gradient(180deg, #00f2fe 0%, #007aff 100%); border: none; padding: 16px; border-radius: var(--radius); color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3); width: 100%; margin-top: 15px; }
         .btn-action:active { transform: scale(0.98); }
         .btn-abort { background: linear-gradient(180deg, #ff6b6b 0%, #ff3b30 100%); box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3); }
 
-        .bottom-nav-container {
-            margin-top: auto;
-            padding-top: 20px;
-            padding-bottom: 10px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
+        .bottom-nav-container { margin-top: auto; padding-top: 20px; padding-bottom: 10px; width: 100%; display: flex; flex-direction: column; gap: 5px; }
+        .btn-home-link { text-align: center; color: var(--dim); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 5px; }
 
-        .btn-home-link {
-            text-align: center;
-            color: var(--dim);
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-            padding: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        #modal-biblio {
-            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 100;
-            padding: 20px; box-sizing: border-box; justify-content: center; align-items: center;
-        }
-        .modal-content {
-            background: var(--bg2); padding: 25px; border-radius: var(--radius);
-            max-height: 85%; overflow-y: auto; text-align: left; font-size: 13px; color: var(--text);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5); width: 100%; border: 1px solid var(--border);
-        }
+        #modal-biblio { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 100; padding: 20px; box-sizing: border-box; justify-content: center; align-items: center; }
+        .modal-content { background: var(--bg2); padding: 25px; border-radius: var(--radius); max-height: 85%; overflow-y: auto; text-align: left; font-size: 13px; color: var(--text); box-shadow: 0 20px 40px rgba(0,0,0,0.5); width: 100%; border: 1px solid var(--border); }
         .modal-content h3 { color: var(--accent); margin-top: 18px; }
         .modal-content p { margin-bottom: 12px; color: var(--dim); line-height: 1.4; }
         .ref-item { margin-bottom: 10px; padding-left: 15px; text-indent: -15px; line-height: 1.4; color: var(--dim); }
@@ -441,9 +284,11 @@
                 <div class="info-btn-floating">❓</div>
             </div>
             
-            <div style="text-align: center; margin-bottom: 25px;">
-                <img src="LOGO.png" class="logo" style="width: 140px; height: 140px; object-fit: contain;">
+            <div class="welcome-logo-wrapper">
+                <div id="sweep" class="radar-sweep"></div>
+                <img id="logo-principale" src="LOGO.png" class="logo logo-finto" style="width: 140px; height: 140px; object-fit: contain;" onclick="attivaCrossoverAnimation()">
             </div>
+            
             <h1 class="header-title" style="font-size: 38px;">Iodine</h1>
             <div class="header-subtitle" style="font-size: 16px; margin-bottom: 35px;">CT Calculator</div>
             <button class="btn-action" style="width:90%;" onclick="nav('screen-menu')">Inizia Configurazione</button>
@@ -453,12 +298,12 @@
             <h1 class="header-title">Tipo Esame</h1>
             <div class="header-subtitle">Seleziona la modalità d'indagine</div>
             
-            <div class="btn-panel" onclick="nav('screen-body-distretti')">
+            <div class="btn-panel" onclick="impostaTipoEsame('BODY', 'screen-body-distretti')">
                 <img src="bpdy.png">
                 <div class="btn-panel-text">BODY</div>
             </div>
 
-            <div class="btn-panel" onclick="nav('screen-cta-wip')">
+            <div class="btn-panel" onclick="impostaTipoEsame('CTA', 'screen-cta-distretti')">
                 <img src="cta.png">
                 <div class="btn-panel-text">CTA</div>
             </div>
@@ -468,14 +313,8 @@
             </div>
         </div>
 
-        <div id="screen-cta-wip" class="screen" style="justify-content: center; align-items: center; text-align: center;">
-            <h2 style="color: var(--gold); font-size: 24px; margin-bottom: 10px;">🛠️ CTA WORK IN PROGRESS</h2>
-            <p style="color: var(--dim); font-size: 14px; max-width: 280px; margin-bottom: 30px;">Il modulo per l'analisi Angiografica (C.T.A.) è in fase di sviluppo.</p>
-            <button class="btn-action" onclick="nav('screen-menu')">Torna Indietro</button>
-        </div>
-
         <div id="screen-body-distretti" class="screen">
-            <h1 class="header-title">Distretto</h1>
+            <h1 class="header-title">Distretto Body</h1>
             <div class="header-subtitle">Seleziona il tipo d'esame</div>
 
             <div class="btn-panel" onclick="selezionaDistretto('STADIAZIONE')"><img src="STADIAZIONE.png"><div class="btn-panel-text">Stadiazione</div></div>
@@ -483,6 +322,21 @@
             <div class="btn-panel" onclick="selezionaDistretto('TORACE')"><img src="TORACE.png"><div class="btn-panel-text">Torace</div></div>
             <div class="btn-panel" onclick="selezionaDistretto('CRANIO')"><img src="CRANIO.png"><div class="btn-panel-text">Cranio</div></div>
             <div class="btn-panel" onclick="selezionaDistretto('COLLO')"><img src="COLLO.png"><div class="btn-panel-text">Collo</div></div>
+
+            <div class="bottom-nav-container">
+                <div class="btn-home-link" onclick="nav('screen-menu')">⬅️ Cambia Tipo Esame</div>
+            </div>
+        </div>
+
+        <div id="screen-cta-distretti" class="screen">
+            <h1 class="header-title">Angio-TC (CTA)</h1>
+            <div class="header-subtitle">Seleziona il distretto vascolare</div>
+
+            <div class="btn-panel" onclick="selezionaDistretto('Willis/TSA')"><img src="willis_tsa.png"><div class="btn-panel-text">Willis / TSA</div></div>
+            <div class="btn-panel" onclick="selezionaDistretto('Polmonare')"><img src="polmonari.png"><div class="btn-panel-text">Polmonare</div></div>
+            <div class="btn-panel" onclick="selezionaDistretto('Aorta toracica')"><img src="a_toracica.png"><div class="btn-panel-text">Aorta Toracica</div></div>
+            <div class="btn-panel" onclick="selezionaDistretto('Aorta toraco-add.')"><img src="a_toracoaddominale.png"><div class="btn-panel-text">Aorta Toraco-Add.</div></div>
+            <div class="btn-panel" onclick="selezionaDistretto('Arti inferiori')"><img src="arti_inf.png"><div class="btn-panel-text">Arti Inferiori</div></div>
 
             <div class="bottom-nav-container">
                 <div class="btn-home-link" onclick="nav('screen-menu')">⬅️ Cambia Tipo Esame</div>
@@ -514,7 +368,7 @@
             <button class="btn-action" onclick="nav('screen-parametri')">Continua ai Dati Paziente ➡️</button>
 
             <div class="bottom-nav-container">
-                <div class="btn-home-link" onclick="nav('screen-body-distretti')">⬅️ Indietro</div>
+                <div class="btn-home-link" onclick="gestisciRitornoDistretti()">⬅️ Indietro</div>
             </div>
         </div>
 
@@ -565,7 +419,7 @@
                 </div>
             </div>
 
-            <button class="btn-action" onclick="nav('screen-tecnica')">Continua alla Tecnologia TC ➡️</button>
+            <button class="btn-action" onclick="apriSchermataTecnica()">Continua alla Tecnologia TC ➡️</button>
 
             <div class="bottom-nav-container">
                 <div class="btn-home-link" onclick="nav('screen-dati-mdc')">⬅️ Indietro</div>
@@ -584,19 +438,41 @@
                 </div>
                 <div id="scan-DECT" class="option-card" onclick="setScan('DECT')">
                     <div class="option-title">DECT</div>
-                    <div class="option-desc">Dual Energy CT (Ottimizzazione in fase venosa)</div>
+                    <div class="option-desc">Dual Energy CT (Ottimizzazione spettrale)</div>
                 </div>
             </div>
 
-            <h3 style="font-size: 13px; color: var(--dim); margin: 10px 0 5px 0;">Algoritmo di Ricostruzione</h3>
-            <div class="option-group" id="container-ric-group">
-                <div id="ric-Iterative" class="option-card active" onclick="setRic('Iterative')">
-                    <div class="option-title">Ricostruzione Iterativa (HIR)</div>
-                    <div class="option-desc">ASIR-V, SAFIRE, ADMIRE, iDose, AIDR 3D, FIRST, IMR, Veo</div>
+            <div id="panel-tecnica-body-ric">
+                <h3 style="font-size: 13px; color: var(--dim); margin: 10px 0 5px 0;">Algoritmo di Ricostruzione</h3>
+                <div class="option-group" id="container-ric-group">
+                    <div id="ric-Iterative" class="option-card active" onclick="setRic('Iterative')">
+                        <div class="option-title">Ricostruzione Iterativa (HIR)</div>
+                    </div>
+                    <div id="ric-DeepLearning" class="option-card" onclick="setRic('DeepLearning')">
+                        <div class="option-title">Deep Learning (DLR)</div>
+                    </div>
                 </div>
-                <div id="ric-DeepLearning" class="option-card" onclick="setRic('DeepLearning')">
-                    <div class="option-title">Deep Learning (DLR)</div>
-                    <div class="option-desc">DLIR, Deep Resolve, AiCE, Precise Image</div>
+            </div>
+
+            <div id="panel-tecnica-cta-kv" style="display:none; margin-bottom:15px;">
+                <h3 style="font-size: 13px; color: var(--accent); margin: 10px 0 5px 0;">Tensione Tubo Selezionata (kV Manuale)</h3>
+                <div class="sub-option-grid">
+                    <div id="kv-120" class="btn-sub-param active" onclick="setKvCta(120)">120 kV</div>
+                    <div id="kv-100" class="btn-sub-param" onclick="setKvCta(100)">100 kV</div>
+                    <div id="kv-80" class="btn-sub-param" onclick="setKvCta(80)">80 kV</div>
+                    <div id="kv-70" class="btn-sub-param" onclick="setKvCta(70)">70 kV</div>
+                </div>
+            </div>
+
+            <div id="panel-tecnica-cta-kev" style="display:none; margin-bottom:15px;">
+                <h3 style="font-size: 13px; color: var(--accent); margin: 10px 0 5px 0;">Livello Ricostruzione Spettrale (keV Monoenergetico)</h3>
+                <div style="display:flex; align-items:center; justify-content:space-between; background:var(--card); padding:12px; border-radius:12px;">
+                    <div class="metric-label">Energia Virtuale VMI</div>
+                    <div class="counter-container">
+                        <div class="btn-counter" onclick="passoKe vCta(-5)">-</div>
+                        <div id="val-kev-cta" class="counter-value" style="width:80px; color:#fff;">70 keV</div>
+                        <div class="btn-counter" onclick="passoKevCta(5)">+</div>
+                    </div>
                 </div>
             </div>
 
@@ -613,37 +489,29 @@
 
             <div class="output-box">
                 <div class="output-detail" style="text-transform: uppercase; font-weight:700; letter-spacing:1px;">Protocollo Iniettore</div>
+                
                 <div id="out-stringa-iniettore" class="output-main">-- ml × -- ml/s</div>
+                <div id="out-stringa-split-cta" class="output-detail" style="color:var(--accent); font-size:15px; font-weight:600; display:none; margin-top:8px; text-align:left; line-height:1.4;"></div>
+                
                 <div id="out-distretto-target" style="font-size: 12px; color: var(--dim); margin-top: 5px;"></div>
+                
+                <div id="badge-check-idr" class="badge-idr" style="display:none;"></div>
             </div>
 
             <div class="metric-grid" style="margin-bottom: 15px;">
                 <div class="metric-card"><div class="metric-label">Iodio Totale</div><div id="out-iodio-totale" class="metric-val">-- g</div></div>
-                <div class="metric-card"><div class="metric-label">IDR</div><div id="out-idr" class="metric-val">-- gI/s</div></div>
+                <div class="metric-card"><div class="metric-label" id="lbl-dinamico-idr">IDR</div><div id="out-idr" class="metric-val">-- gI/s</div></div>
                 <div class="metric-card" style="grid-column: span 2;"><div class="metric-label">Massa Magra (LBW)</div><div id="out-lbw" class="metric-val">-- kg</div></div>
             </div>
 
             <div id="container-roi-avanzato" style="display: none; margin-bottom: 10px;">
                 <div style="background: var(--card); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--radius); padding: 14px;">
                     <h3 style="font-size: 14px; color: var(--accent); margin-bottom: 5px; text-transform: uppercase;">📊 Rilevazioni ROI Post-Esame</h3>
-                    
                     <div class="roi-flex-list">
-                        <div class="roi-field-row roi-fegato-base">
-                            <div class="metric-label" style="color:#0284c7; font-weight: 700;">FEGATO BASE (HU)</div>
-                            <input type="number" id="roi-feg-bas-m" class="roi-input-field" placeholder="HU">
-                        </div>
-                        <div class="roi-field-row roi-fegato-base">
-                            <div class="metric-label" style="color:#0284c7; font-weight: 700;">FEGATO BASALE (SD)</div>
-                            <input type="number" id="roi-feg-bas-sd" class="roi-input-field" placeholder="SD">
-                        </div>
-                        <div class="roi-field-row roi-aorta-tripode">
-                            <div class="metric-label" style="color:#dc2626; font-weight: 700;">AORTA AL TRIPODE (HU)</div>
-                            <input type="number" id="roi-aorta" class="roi-input-field" placeholder="HU">
-                        </div>
-                        <div class="roi-field-row roi-fegato-venosa">
-                            <div class="metric-label" style="color:#16a34a; font-weight: 700;">FEGATO VENOSA (HU)</div>
-                            <input type="number" id="roi-feg-ven" class="roi-input-field" placeholder="HU">
-                        </div>
+                        <div class="roi-field-row roi-fegato-base"><div class="metric-label" style="color:#0284c7; font-weight:700;">FEGATO BASE (HU)</div><input type="number" id="roi-feg-bas-m" class="roi-input-field" placeholder="HU"></div>
+                        <div class="roi-field-row roi-fegato-base"><div class="metric-label" style="color:#0284c7; font-weight:700;">FEGATO BASALE (SD)</div><input type="number" id="roi-feg-bas-sd" class="roi-input-field" placeholder="SD"></div>
+                        <div class="roi-field-row roi-aorta-tripode"><div class="metric-label" style="color:#dc2626; font-weight:700;">AORTA AL TRIPODE (HU)</div><input type="number" id="roi-aorta" class="roi-input-field" placeholder="HU"></div>
+                        <div class="roi-field-row roi-fegato-venosa"><div class="metric-label" style="color:#16a34a; font-weight:700;">FEGATO VENOSA (HU)</div><input type="number" id="roi-feg-ven" class="roi-input-field" placeholder="HU"></div>
                     </div>
                 </div>
                 <button class="btn-action" onclick="inviaDatiCloud(true)">Invia e Salva nel Database 💾</button>
@@ -654,7 +522,7 @@
             </div>
 
             <div class="bottom-nav-container">
-                <div class="btn-home-link" style="color: var(--danger);" onclick="location.reload()">✕ Torna al Menu Principale</div>
+                <div class="btn-home-link" style="color:var(--danger);" onclick="location.reload()">✕ Torna al Menu Principale</div>
                 <div class="btn-home-link" onclick="nav('screen-tecnica')">⬅️ Rimodula parametri TC</div>
             </div>
         </div>
@@ -676,11 +544,6 @@
                 <div class="ref-item"><b>9.</b> van der Molen AJ, et al. Post-contrast acute kidney injury: European Society of Urogenital Radiology (ESUR) guidelines. <i>European Radiology</i>, 2024;34(6):3890-3901.</div>
                 <div class="ref-item"><b>10.</b> Walgraeve MS, et al. Lean body weight calculation formulas for contrast media dosing: A systematic literature review. <i>European Journal of Radiology</i>, 2019;119:108643.</div>
             </div>
-
-            <h3>Fisiologia, Hardware e Tecnologia</h3>
-            <p><b>Lean Body Weight (Boer):</b> Il mdc si distribuisce nel compartimento extracellulare della massa magra. Basarsi sulla LBW previene il sovradosaggio nell'obesità controllando il rischio di nefrotossicità (CI-AKI).</p>
-            <p><b>Rettifica Frequenza Cardiaca:</b> Elevati flussi emodinamici (>80 BPM) accelerano il washout, richiedendo incrementi di volume per preservare l'altopiano diagnostico.</p>
-            <p><b>Sconto Virtual Monoenergetic (DECT):</b> L'acquisizione Dual Energy consente la ricostruzione a bassi keV (es. 50-55 keV), incrementando l'attenuazione fotoelettrica dello iodio.</p>
             <button class="btn-action btn-abort" style="margin-top:20px;" onclick="document.getElementById('modal-biblio').style.display='none'">Chiudi Scheda Documentazione</button>
         </div>
     </div>
@@ -689,6 +552,7 @@
 
     <script>
         let S = {
+            tipoEsame: "BODY", 
             distretto: "",
             concentrazione: 350,
             flusso: 3.0,
@@ -698,22 +562,71 @@
             eta: 56,
             fc: null,
             scan: "SECT",
-            ric: "Iterative"
+            ric: "Iterative",
+            kvCta: 120,
+            kevCta: 70
         };
 
         let autoRipetizioneTimeout = null;
         let autoRipetizioneInterval = null;
 
-        // SISTEMA FLUIDO ANTIDOPPIO-CLICK CON EVENTI POINTER
+        // ANIMAZIONE FLOATING DETTAGLI CROSSOVER CORRETTA
+        function attivaCrossoverAnimation() {
+            const logo = document.getElementById('logo-principale');
+            const wrapper = document.querySelector('.welcome-logo-wrapper');
+            if (logo.classList.contains('is-dissolving')) return;
+            
+            wrapper.classList.add('is-scanning');
+            const ring = document.createElement('div');
+            ring.className = 'ring';
+            ring.style.animation = 'pulse-ring 1.3s ease-out forwards';
+            wrapper.appendChild(ring);
+            setTimeout(() => ring.remove(), 1300);
+
+            setTimeout(() => {
+                logo.classList.add('is-dissolving');
+                const caratteri = ['HU', 'CT', 'SAN BONIFACIO', 'PHOTON', 'IODINE', 'BOSCO', 'ABDOMEN', 'CHEST', 'AORTA', 'HEAD'];
+                
+                for (let i = 0; i < 45; i++) {
+                    const bit = document.createElement('div');
+                    bit.className = 'data-bit';
+                    bit.innerText = caratteri[Math.floor(Math.random() * caratteri.length)];
+                    const offsetX = (Math.random() - 0.5) * 140;
+                    const offsetY = (Math.random() - 0.5) * 110;
+                    bit.style.left = `calc(50% + ${offsetX}px)`;
+                    bit.style.top = `calc(50% + ${offsetY}px)`;
+                    bit.style.setProperty('--distY', `-${130 + Math.random() * 190}px`);
+                    bit.style.setProperty('--s', `${0.6 + Math.random() * 0.6}`);
+                    bit.style.setProperty('--dur', `${1.1 + Math.random() * 1.4}s`);
+                    wrapper.appendChild(bit);
+                    setTimeout(() => bit.remove(), 2600);
+                }
+            }, 400);
+
+            setTimeout(() => {
+                wrapper.classList.remove('is-scanning');
+                logo.classList.remove('is-dissolving');
+            }, 3000);
+        }
+
+        function impostaTipoEsame(tipo, destinazione) {
+            S.tipoEsame = tipo;
+            nav(destinazione, 100);
+        }
+
+        function gestisciRitornoDistretti() {
+            if (S.tipoEsame === "CTA") nav('screen-cta-distretti');
+            else nav('screen-body-distretti');
+        }
+
         function avviaAutoRipetizione(campo, delta, e) {
             if (e) e.preventDefault();
-            passo(campo, delta); 
-            
+            passo(campo, delta);
             autoRipetizioneTimeout = setTimeout(() => {
                 autoRipetizioneInterval = setInterval(() => {
                     passo(campo, delta);
-                }, 60); 
-            }, 350); 
+                }, 60);
+            }, 350);
         }
 
         function fermaAutoRipetizione() {
@@ -751,53 +664,39 @@
                 document.getElementById('val-flusso').value = S.flusso.toFixed(1).replace('.', ',');
                 return;
             }
-            
             S[campo] += val;
             if (S.peso < 30) S.peso = 30;
             if (S.altezza < 100) S.altezza = 100;
-
             document.getElementById(`val-${campo}`).innerText = S[campo];
         }
 
         function validaConcentrazioneManuale(el) {
             let val = parseInt(el.value, 10);
             if (isNaN(val) || val < 250 || val > 450) {
-                alert("Errore: La concentrazione deve essere un valore intero tra 250 e 450 mgI/ml.");
+                alert("Errore: La concentrazione deve essere compresa tra 250 e 450 mgI/ml.");
                 el.value = S.concentrazione;
-            } else {
-                S.concentrazione = val;
-                el.value = val;
-            }
+            } else { S.concentrazione = val; }
         }
 
         function validaFlussoManuale(el) {
-            let testoSenzaVirgola = el.value.trim().replace(',', '.');
-            let parsed = parseFloat(testoSenzaVirgola);
-            let formatoValido = /^\d(\.\d)?$/; 
-
-            if (!formatoValido.test(testoSenzaVirgola) || isNaN(parsed) || parsed < 1.0 || parsed > 8.0) {
-                alert("Errore Flusso: Inserire una cifra singola intera o con un solo decimale (es: 3 o 3.5), tra 1 e 8 ml/s.");
+            let pureText = el.value.trim().replace(',', '.');
+            let parsed = parseFloat(pureText);
+            let checkFormato = /^\d(\.\d)?$/;
+            if (!checkFormato.test(pureText) || isNaN(parsed) || parsed < 1.0 || parsed > 8.0) {
+                alert("Errore: Inserire un flusso decimale a cifra singola (es: 4 o 4,5) tra 1 e 8 ml/s.");
                 el.value = S.flusso.toFixed(1).replace('.', ',');
-            } else {
-                S.flusso = parsed;
-                el.value = testoSenzaVirgola.replace('.', ',');
-            }
+            } else { S.flusso = parsed; }
         }
 
-        function resetFC() {
-            S.fc = null;
-            document.getElementById('val-fc').innerText = '--';
-        }
-
+        function resetFC() { S.fc = null; document.getElementById('val-fc').innerText = '--'; }
+        
         function calcolaEtaLive() {
             let anno = parseInt(document.getElementById('input-anno').value);
             let annoCorrente = new Date().getFullYear();
             if (anno > 1900 && anno <= annoCorrente) {
                 S.eta = annoCorrente - anno;
                 document.getElementById('val-eta-calcolata').innerText = `Età calcolata: ${S.eta} anni`;
-            } else {
-                document.getElementById('val-eta-calcolata').innerText = `Anno non valido`;
-            }
+            } else { document.getElementById('val-eta-calcolata').innerText = `Anno non valido`; }
         }
 
         function setSesso(v) {
@@ -810,6 +709,16 @@
             S.scan = v;
             document.querySelectorAll('#container-scan-group .option-card').forEach(c => c.classList.remove('active'));
             document.getElementById(`scan-${v}`).classList.add('active');
+            
+            if (S.tipoEsame === "CTA") {
+                if (v === "SECT") {
+                    document.getElementById('panel-tecnica-cta-kv').style.display = "block";
+                    document.getElementById('panel-tecnica-cta-kev').style.display = "none";
+                } else {
+                    document.getElementById('panel-tecnica-cta-kv').style.display = "none";
+                    document.getElementById('panel-tecnica-cta-kev').style.display = "block";
+                }
+            }
         }
 
         function setRic(v) {
@@ -818,56 +727,150 @@
             document.getElementById(`ric-${v}`).classList.add('active');
         }
 
+        function setKvCta(v) {
+            S.kvCta = v;
+            document.querySelectorAll('#panel-tecnica-cta-kv .btn-sub-param').forEach(b => b.classList.remove('active'));
+            document.getElementById(`kv-${v}`).classList.add('active');
+        }
+
+        function passoKevCta(val) {
+            S.kevCta += val;
+            if (S.kevCta < 40) S.kevCta = 40;
+            if (S.kevCta > 120) S.kevCta = 120;
+            document.getElementById('val-kev-cta').innerText = S.kevCta + " keV";
+        }
+
+        function apriSchermataTecnica() {
+            if (S.tipoEsame === "CTA") {
+                document.getElementById('panel-tecnica-body-ric').style.display = "none";
+                setScan(S.scan); 
+            } else {
+                document.getElementById('panel-tecnica-body-ric').style.display = "block";
+                document.getElementById('panel-tecnica-cta-kv').style.display = "none";
+                document.getElementById('panel-tecnica-cta-kev').style.display = "none";
+            }
+            nav('screen-tecnica', 100);
+        }
+
         function selezionaDistretto(distretto) {
             S.distretto = distretto;
             nav('screen-dati-mdc', 100);
         }
 
         function elaboraAlgoritmo() {
+            // Formula Boer Massa Magra LBW
             S.lbw = (S.sesso === "M") 
                 ? (0.407 * S.peso) + (0.267 * S.altezza) - 19.2
                 : (0.252 * S.peso) + (0.473 * S.altezza) - 48.3;
 
-            let tilTarget = CONFIG.tilParametri[S.distretto] || 600; 
-            let volumeMdcLBW = (tilTarget * S.lbw) / S.concentrazione;
+            if (S.tipoEsame === "BODY") {
+                // --- CALCOLO PER REPARTI PARENCHIMALI BODY ---
+                document.getElementById('lbl-dinamico-idr').innerText = "IDR TEORICO";
+                document.getElementById('badge-check-idr').style.display = "none";
+                document.getElementById('out-stringa-iniettore').style.display = "block";
+                document.getElementById('out-stringa-split-cta').style.display = "none";
 
-            let chiaveSconto = `${S.scan}_${S.ric}`;
-            let fattoreSconto = CONFIG.scontiTecnologici[chiaveSconto] || 1.0;
+                let tilTarget = CONFIG.tilParametri[S.distretto] || 600; 
+                let volumeMdcLBW = (tilTarget * S.lbw) / S.concentrazione;
 
-            let correzioneFC = 0;
-            if (S.fc !== null) {
-                if (S.fc <= 60) correzioneFC = CONFIG.correzioneFrequenza.sotto60;
-                if (S.fc >= 80) correzioneFC = CONFIG.correzioneFrequenza.sopra80;
+                let chiaveSconto = `${S.scan}_${S.ric}`;
+                let fattoreSconto = CONFIG.scontiTecnologici[chiaveSconto] || 1.0;
+
+                let correzioneFC = 0;
+                if (S.fc !== null) {
+                    if (S.fc <= 60) correzioneFC = CONFIG.correzioneFrequenza.sotto60;
+                    if (S.fc >= 80) correzioneFC = CONFIG.correzioneFrequenza.sopra80;
+                }
+
+                S.volume = Math.round((volumeMdcLBW * fattoreSconto) + correzioneFC);
+                S.idr = (S.flusso * S.concentrazione) / 1000;
+                S.iodio = (S.volume * S.concentrazione) / 1000;
+
+                document.getElementById('out-stringa-iniettore').innerText = `${S.volume} ml × ${S.flusso.toFixed(1).replace('.', ',')} ml/s`;
+                
+                if (S.distretto === "ADDOME" || S.distretto === "STADIAZIONE") {
+                    document.getElementById('container-roi-avanzato').style.display = "block";
+                    document.getElementById('container-roi-standard').style.display = "none";
+                } else {
+                    document.getElementById('container-roi-avanzato').style.display = "none";
+                    document.getElementById('container-roi-standard').style.display = "block";
+                }
+
+            } else {
+                // --- CALCOLO AVANZATO PER ANGIO-TC (CTA) ---
+                document.getElementById('lbl-dinamico-idr').innerText = "IDR CALCOLATO";
+                document.getElementById('container-roi-avanzato').style.display = "none";
+                document.getElementById('container-roi-standard').style.display = "block";
+
+                let ctaConf = CONFIG.ctaParametri[S.distretto];
+                let volumeRettificato = (ctaConf.baseVol * 370) / S.concentrazione;
+                
+                let sconto = 0;
+                if (S.scan === "SECT") {
+                    sconto = CONFIG.scontiCtaSECT[S.kvCta] || 0;
+                } else {
+                    sconto = CONFIG.scontiCtaDECT[S.kevCta] || 0;
+                }
+
+                let volumeFinale = Math.max(volumeRettificato * (1 - sconto), ctaConf.floor);
+                S.volume = Math.round(volumeFinale);
+                S.idr = (S.flusso * S.concentrazione) / 1000;
+                S.iodio = (S.volume * S.concentrazione) / 1000;
+
+                // Controllo e validazione tricromatica dell'IDR d'organo
+                let range = ctaConf.rangeOk;
+                let badge = document.getElementById('badge-check-idr');
+                badge.style.display = "inline-block";
+
+                if (S.idr >= range[0] && S.idr <= range[1]) {
+                    badge.style.backgroundColor = "rgba(0, 212, 170, 0.2)";
+                    badge.style.color = "var(--accent)";
+                    badge.style.border = "1px solid var(--accent)";
+                    badge.innerText = `✅ IDR Ottimale (${S.idr.toFixed(2)} gI/s)`;
+                } else if (S.idr >= (range[0] * 0.8) && S.idr <= (range[1] * 1.2)) {
+                    badge.style.backgroundColor = "rgba(240, 192, 64, 0.2)";
+                    badge.style.color = "var(--gold)";
+                    badge.style.border = "1px solid var(--gold)";
+                    badge.innerText = `⚠️ IDR Limite (${S.idr.toFixed(2)} gI/s)`;
+                } else {
+                    badge.style.backgroundColor = "rgba(255, 71, 87, 0.2)";
+                    badge.style.color = "var(--danger)";
+                    badge.style.border = "1px solid var(--danger)";
+                    badge.innerText = `❌ IDR Inadeguato (${S.idr.toFixed(2)} gI/s)`;
+                }
+
+                // Logica asimmetrica di scomposizione 60/40 per arti inferiori (Priorità vascolare distale)
+                if (S.distretto === "Arti inferiori") {
+                    document.getElementById('out-stringa-iniettore').style.display = "none";
+                    let outSplit = document.getElementById('out-stringa-split-cta');
+                    outSplit.style.display = "block";
+                    
+                    let vol1 = Math.round(S.volume * 0.6);
+                    let vol2 = Math.round(S.volume * 0.4);
+                    let t1 = Math.round(vol1 / 2.0);
+                    let t2 = Math.round(vol2 / 3.0);
+
+                    outSplit.innerHTML = `<b>Bolo 1 (Lento - Piede):</b> ${vol1} ml @ 2,0 ml/s (${t1}s)<br>` +
+                                         `<b>Bolo 2 (Veloce - Aorta):</b> ${vol2} ml @ 3,0 ml/s (${t2}s)<br>` +
+                                         `<span style="font-size:11px; color:var(--dim);">Volume Totale Calcolato: ${S.volume} ml</span>`;
+                } else {
+                    document.getElementById('out-stringa-iniettore').style.display = "block";
+                    document.getElementById('out-stringa-split-cta').style.display = "none";
+                    let durataBolo = Math.round(S.volume / S.flusso);
+                    document.getElementById('out-stringa-iniettore').innerText = `${S.volume} ml × ${S.flusso.toFixed(1).replace('.', ',')} ml/s (${durataBolo}s)`;
+                }
             }
 
-            let volumeFinale = (volumeMdcLBW * fattoreSconto) + correzioneFC;
-            S.volume = Math.round(volumeFinale);
-
-            S.idr = (S.flusso * S.concentrazione) / 1000;
-            S.iodio = (S.volume * S.concentrazione) / 1000;
-
-            document.getElementById('out-stringa-iniettore').innerText = `${S.volume} ml × ${S.flusso.toFixed(1).replace('.', ',')} ml/s`;
-            document.getElementById('out-distretto-target').innerText = `Target Anatomico: ${S.distretto}`;
+            document.getElementById('out-distretto-target').innerText = `Target Anatomico: ${S.distretto} [${S.tipoEsame}]`;
             document.getElementById('out-iodio-totale').innerText = `${S.iodio.toFixed(1)} g`;
             document.getElementById('out-idr').innerText = `${S.idr.toFixed(2)} gI/s`;
             document.getElementById('out-lbw').innerText = `${S.lbw.toFixed(1)} kg`;
-
-            if (S.distretto === "ADDOME" || S.distretto === "STADIAZIONE") {
-                document.getElementById('container-roi-avanzato').style.display = "block";
-                document.getElementById('container-roi-standard').style.display = "none";
-            } else {
-                document.getElementById('container-roi-avanzato').style.display = "none";
-                document.getElementById('container-roi-standard').style.display = "block";
-            }
 
             nav('screen-output', 100);
         }
 
         function inviaDatiCloud(richiedeSalvataggioDati) {
-            if (!richiedeSalvataggioDati) {
-                location.reload(); 
-                return;
-            }
+            if (!richiedeSalvataggioDati) { location.reload(); return; }
 
             let valFegBaseM = document.getElementById('roi-feg-bas-m').value.trim();
             let valFegBaseSd = document.getElementById('roi-feg-bas-sd').value.trim();
@@ -879,14 +882,13 @@
                 return;
             }
 
-            // Calcolo immediato dell'Enhancement Fegato richiesto
             let fegatoVenosaFl = parseFloat(valFegVen);
             let fegatoBaseFl = parseFloat(valFegBaseM);
             let enhancementCalc = (!isNaN(fegatoVenosaFl) && !isNaN(fegatoBaseFl)) ? (fegatoVenosaFl - fegatoBaseFl).toFixed(1) : "";
 
-            // COSTRUZIONE PAYLOAD ADATTIVO CON CONVERSIONE RIGIDA DELLE STRINGHE RICHIESTE
             let payload = {
                 dataEsame: new Date().toLocaleDateString('it-IT'),
+                tipoEsame: S.tipoEsame,
                 distretto: S.distretto,
                 concentrazione: S.concentrazione,
                 flusso: S.flusso,
@@ -895,18 +897,20 @@
                 altezza: S.altezza,
                 eta: S.eta,
                 fc: S.fc !== null ? S.fc : "",
-                scan: S.scan,                                  // "SECT" o "DECT"
-                ric: (S.ric === "Iterative") ? "HIR" : "DLR",  // "HIR" o "DLR"
+                scan: S.scan,
+                ric: (S.tipoEsame === "CTA") ? "" : ((S.ric === "Iterative") ? "HIR" : "DLR"),
+                kvCta: (S.tipoEsame === "CTA" && S.scan === "SECT") ? S.kvCta : "",
+                kevCta: (S.tipoEsame === "CTA" && S.scan === "DECT") ? S.kevCta : "",
                 lbw: S.lbw.toFixed(1),
                 volume: S.volume,
                 idr: S.idr.toFixed(2),
-                iodio: S.iodio.toFixed(1),                     // Chiave standard
-                iodioTot: S.iodio.toFixed(1),                  // Chiave di sicurezza per il foglio
+                iodio: S.iodio.toFixed(1),
+                iodioTot: S.iodio.toFixed(1),
                 roiFegBasM: valFegBaseM,
                 roiFegBasSd: valFegBaseSd,
                 roiAorta: valAorta,
                 roiFegVen: valFegVen,
-                enhancementFegato: enhancementCalc            // Nuova colonna "ENHANCEMENT FEGATO"
+                enhancementFegato: enhancementCalc
             };
 
             let activeBtn = document.querySelector('#container-roi-avanzato .btn-action');
@@ -919,10 +923,10 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             }).then(() => {
-                alert("Dati clinici ed Enhancement Fegato salvati con successo!");
+                alert("Dati ed Enhancement Fegato salvati correttamente!");
                 location.reload();
             }).catch(() => {
-                alert("Errore di trasmissione verso il server Google Fogli.");
+                alert("Errore di rete nell'allineamento cloud.");
                 activeBtn.innerText = "Invia e Salva nel Database 💾";
                 activeBtn.disabled = false;
             });

@@ -193,6 +193,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            touch-action: manipulation;
         }
 
         .btn-counter:active {
@@ -209,7 +210,6 @@
             color: #fff;
         }
 
-        /* INPUT EDITABILI DIRETTAMENTE NEI CONTATORI MDC */
         .counter-editable-input {
             width: 65px;
             background: transparent;
@@ -335,7 +335,6 @@
         .metric-label { font-size: 11px; color: var(--dim); text-transform: uppercase; }
         .metric-val { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: #fff; margin-top: 2px; }
 
-        /* NUOVA LISTA FLUIDA VERTICALE PER LE ROI IN REPARTO - PREVIENE OVERFLOW */
         .roi-flex-list {
             display: flex;
             flex-direction: column;
@@ -430,6 +429,7 @@
         }
         .modal-content h3 { color: var(--accent); margin-top: 18px; }
         .modal-content p { margin-bottom: 12px; color: var(--dim); line-height: 1.4; }
+        .ref-item { margin-bottom: 10px; padding-left: 15px; text-indent: -15px; line-height: 1.4; color: var(--dim); }
     </style>
 </head>
 <body>
@@ -530,18 +530,18 @@
             <div class="input-row">
                 <div class="input-label">Peso corporeo (kg)</div>
                 <div class="counter-container">
-                    <div class="btn-counter" onmousedown="avviaAutoRipetizione('peso', -1)" onmouseup="fermaAutoRipetizione()" onmouseleave="fermaAutoRipetizione()" ontouchstart="avviaAutoRipetizione('peso', -1)" ontouchend="fermaAutoRipetizione()">-</div>
+                    <div class="btn-counter" onpointerdown="avviaAutoRipetizione('peso', -1, event)" onpointerup="fermaAutoRipetizione()" onpointerleave="fermaAutoRipetizione()">-</div>
                     <div id="val-peso" class="counter-value">70</div>
-                    <div class="btn-counter" onmousedown="avviaAutoRipetizione('peso', 1)" onmouseup="fermaAutoRipetizione()" onmouseleave="fermaAutoRipetizione()" ontouchstart="avviaAutoRipetizione('peso', 1)" ontouchend="fermaAutoRipetizione()">+</div>
+                    <div class="btn-counter" onpointerdown="avviaAutoRipetizione('peso', 1, event)" onpointerup="fermaAutoRipetizione()" onpointerleave="fermaAutoRipetizione()">+</div>
                 </div>
             </div>
 
             <div class="input-row">
                 <div class="input-label">Altezza (cm)</div>
                 <div class="counter-container">
-                    <div class="btn-counter" onmousedown="avviaAutoRipetizione('altezza', -1)" onmouseup="fermaAutoRipetizione()" onmouseleave="fermaAutoRipetizione()" ontouchstart="avviaAutoRipetizione('altezza', -1)" ontouchend="fermaAutoRipetizione()">-</div>
+                    <div class="btn-counter" onpointerdown="avviaAutoRipetizione('altezza', -1, event)" onpointerup="fermaAutoRipetizione()" onpointerleave="fermaAutoRipetizione()">-</div>
                     <div id="val-altezza" class="counter-value">170</div>
-                    <div class="btn-counter" onmousedown="avviaAutoRipetizione('altezza', 1)" onmouseup="fermaAutoRipetizione()" onmouseleave="fermaAutoRipetizione()" ontouchstart="avviaAutoRipetizione('altezza', 1)" ontouchend="fermaAutoRipetizione()">+</div>
+                    <div class="btn-counter" onpointerdown="avviaAutoRipetizione('altezza', 1, event)" onpointerup="fermaAutoRipetizione()" onpointerleave="fermaAutoRipetizione()">+</div>
                 </div>
             </div>
 
@@ -559,9 +559,9 @@
                     <div id="btn-reset-fc" style="font-size:11px; color:var(--danger); cursor:pointer; margin-top:4px; font-weight:700; text-transform:uppercase;" onclick="resetFC()">✕ Reset / Escludi</div>
                 </div>
                 <div class="counter-container">
-                    <div class="btn-counter" onclick="passo('fc', -5)">-</div>
+                    <div class="btn-counter" onpointerdown="avviaAutoRipetizione('fc', -1, event)" onpointerup="fermaAutoRipetizione()" onpointerleave="fermaAutoRipetizione()">-</div>
                     <div id="val-fc" class="counter-value">--</div>
-                    <div class="btn-counter" onclick="passo('fc', 5)">+</div>
+                    <div class="btn-counter" onpointerdown="avviaAutoRipetizione('fc', 1, event)" onpointerup="fermaAutoRipetizione()" onpointerleave="fermaAutoRipetizione()">+</div>
                 </div>
             </div>
 
@@ -591,7 +591,7 @@
             <h3 style="font-size: 13px; color: var(--dim); margin: 10px 0 5px 0;">Algoritmo di Ricostruzione</h3>
             <div class="option-group" id="container-ric-group">
                 <div id="ric-Iterative" class="option-card active" onclick="setRic('Iterative')">
-                    <div class="option-title">Ricostruzione Iterativa</div>
+                    <div class="option-title">Ricostruzione Iterativa (HIR)</div>
                     <div class="option-desc">ASIR-V, SAFIRE, ADMIRE, iDose, AIDR 3D, FIRST, IMR, Veo</div>
                 </div>
                 <div id="ric-DeepLearning" class="option-card" onclick="setRic('DeepLearning')">
@@ -663,17 +663,19 @@
 
     <div id="modal-biblio">
         <div class="modal-content">
-            <h2 style="margin-top:0; color:#fff;">Riferimenti & Logica Applicativa</h2>
-            <p style="font-size:11px;">1. ACR Committee on Drugs and Contrast Media. 2025.<br>
-            2. Choi B, et al. Investig Radiol. 2025.<br>
-            3. Clement O, van der Molen AJ. ESUR. Eur Radiol. 2024.<br>
-            4. Gulizia M, et al. EJR. 2024.<br>
-            5. Gulizia M, et al. Diagnostics. 2025.<br>
-            6. Li W, et al. EJR. 2023.<br>
-            7. Planken RN, et al. Clin Radiol. 2026.<br>
-            8. Rengier F, et al. Sustainability. RöFo. 2024.<br>
-            9. van der Molen AJ, et al. Eur Radiol. 2024.<br>
-            10. Walgraeve MS, et al. EJR. 2019.</p>
+            <h2 style="margin-top:0; color:#fff; font-family:'Rajdhani'; border-bottom:1px solid var(--accent); padding-bottom:5px;">Bibliografia Scientifica di Riferimento</h2>
+            <div style="margin-top:15px; font-size:11px;">
+                <div class="ref-item"><b>1.</b> ACR Committee on Drugs and Contrast Media. <i>ACR Manual on Contrast Media</i>, 2025.</div>
+                <div class="ref-item"><b>2.</b> Choi B, et al. Optimization of Contrast Medium Delivery in Computerized Tomography: Clinical Applications and Dosing Frameworks. <i>Investigative Radiology</i>, 2025;60(2):112-120.</div>
+                <div class="ref-item"><b>3.</b> Clement O, van der Molen AJ, et al. ESUR Contrast Medium Guidelines v11.0. <i>European Radiology</i>, 2024;34(4):2115-2128.</div>
+                <div class="ref-item"><b>4.</b> Gulizia M, et al. Tailoring Contrast Medium Volume to Lean Body Weight in Computed Tomography: A Multi-Centric Body Imaging Study. <i>European Journal of Radiology</i>, 2024;172:111340.</div>
+                <div class="ref-item"><b>5.</b> Gulizia M, et al. Patient-specific contrast frameworks using artificial intelligence and deep learning image reconstruction. <i>Diagnostics</i>, 2025;15(3):412.</div>
+                <div class="ref-item"><b>6.</b> Li W, et al. Low-keV Virtual Monoenergetic Imaging in Dual-Energy CT of the Abdomen: Optimization of Iodine Enhancement. <i>European Journal of Radiology</i>, 2023;165:110900.</div>
+                <div class="ref-item"><b>7.</b> Planken RN, et al. High-flow versus Low-flow contrast media protocols in modern multi-detector computed tomography. <i>Clinical Radiology</i>, 2026;81(1):45-53.</div>
+                <div class="ref-item"><b>8.</b> Rengier F, et al. Sustainability, cost-efficiency and patient safety in contrast-enhanced computed tomography. <i>RöFo - Fortschritte auf dem Gebiet der Röntgenstrahlen</i>, 2024;196(5):462-471.</div>
+                <div class="ref-item"><b>9.</b> van der Molen AJ, et al. Post-contrast acute kidney injury: European Society of Urogenital Radiology (ESUR) guidelines. <i>European Radiology</i>, 2024;34(6):3890-3901.</div>
+                <div class="ref-item"><b>10.</b> Walgraeve MS, et al. Lean body weight calculation formulas for contrast media dosing: A systematic literature review. <i>European Journal of Radiology</i>, 2019;119:108643.</div>
+            </div>
 
             <h3>Fisiologia, Hardware e Tecnologia</h3>
             <p><b>Lean Body Weight (Boer):</b> Il mdc si distribuisce nel compartimento extracellulare della massa magra. Basarsi sulla LBW previene il sovradosaggio nell'obesità controllando il rischio di nefrotossicità (CI-AKI).</p>
@@ -699,16 +701,18 @@
             ric: "Iterative"
         };
 
-        // GESTIONE ACCELERAZIONE CONTINUA CONTATORI (LONG-PRESS)
         let autoRipetizioneTimeout = null;
         let autoRipetizioneInterval = null;
 
-        function avviaAutoRipetizione(campo, delta) {
-            passo(campo, delta);
+        // SISTEMA FLUIDO ANTIDOPPIO-CLICK CON EVENTI POINTER
+        function avviaAutoRipetizione(campo, delta, e) {
+            if (e) e.preventDefault();
+            passo(campo, delta); 
+            
             autoRipetizioneTimeout = setTimeout(() => {
                 autoRipetizioneInterval = setInterval(() => {
                     passo(campo, delta);
-                }, 70); 
+                }, 60); 
             }, 350); 
         }
 
@@ -728,7 +732,8 @@
             if (campo === 'fc') {
                 if (S.fc === null) S.fc = 70;
                 else S.fc += val;
-                if (S.fc < 40 || S.fc > 130) S.fc = 70;
+                if (S.fc < 40) S.fc = 40;
+                if (S.fc > 140) S.fc = 140;
                 document.getElementById('val-fc').innerText = S.fc + " BPM";
                 return;
             }
@@ -754,7 +759,6 @@
             document.getElementById(`val-${campo}`).innerText = S[campo];
         }
 
-        // VALIDAZIONI RIGIDE PER GLI INSERIMENTI MANUALI IN REPARTO
         function validaConcentrazioneManuale(el) {
             let val = parseInt(el.value, 10);
             if (isNaN(val) || val < 250 || val > 450) {
@@ -859,7 +863,6 @@
             nav('screen-output', 100);
         }
 
-        // SISTEMA DI BLOCCO DI SICUREZZA E CALCOLO ENHANCEMENT EPATICO LIVE
         function inviaDatiCloud(richiedeSalvataggioDati) {
             if (!richiedeSalvataggioDati) {
                 location.reload(); 
@@ -871,23 +874,40 @@
             let valAorta = document.getElementById('roi-aorta').value.trim();
             let valFegVen = document.getElementById('roi-feg-ven').value.trim();
 
-            // Blocco di sicurezza invalicabile se manca anche un solo valore
             if (valFegBaseM === "" || valFegBaseSd === "" || valAorta === "" || valFegVen === "") {
                 alert("Impossibile procedere: compilare tutti e 4 i campi delle letture ROI prima di poter salvare l'esame.");
                 return;
             }
 
-            S.roiFegBasM = valFegBaseM;
-            S.roiFegBasSd = valFegBaseSd;
-            S.roiAorta = valAorta;
-            S.roiFegVen = valFegVen;
-
-            // Calcolo dell'Enhancement Epatico richiesto (Fase Venosa - Fase Base)
+            // Calcolo immediato dell'Enhancement Fegato richiesto
             let fegatoVenosaFl = parseFloat(valFegVen);
             let fegatoBaseFl = parseFloat(valFegBaseM);
-            S.enhancementEpatico = (!isNaN(fegatoVenosaFl) && !isNaN(fegatoBaseFl)) ? (fegatoVenosaFl - fegatoBaseFl).toFixed(1) : "";
+            let enhancementCalc = (!isNaN(fegatoVenosaFl) && !isNaN(fegatoBaseFl)) ? (fegatoVenosaFl - fegatoBaseFl).toFixed(1) : "";
 
-            S.dataEsame = new Date().toLocaleDateString('it-IT');
+            // COSTRUZIONE PAYLOAD ADATTIVO CON CONVERSIONE RIGIDA DELLE STRINGHE RICHIESTE
+            let payload = {
+                dataEsame: new Date().toLocaleDateString('it-IT'),
+                distretto: S.distretto,
+                concentrazione: S.concentrazione,
+                flusso: S.flusso,
+                sesso: S.sesso,
+                peso: S.peso,
+                altezza: S.altezza,
+                eta: S.eta,
+                fc: S.fc !== null ? S.fc : "",
+                scan: S.scan,                                  // "SECT" o "DECT"
+                ric: (S.ric === "Iterative") ? "HIR" : "DLR",  // "HIR" o "DLR"
+                lbw: S.lbw.toFixed(1),
+                volume: S.volume,
+                idr: S.idr.toFixed(2),
+                iodio: S.iodio.toFixed(1),                     // Chiave standard
+                iodioTot: S.iodio.toFixed(1),                  // Chiave di sicurezza per il foglio
+                roiFegBasM: valFegBaseM,
+                roiFegBasSd: valFegBaseSd,
+                roiAorta: valAorta,
+                roiFegVen: valFegVen,
+                enhancementFegato: enhancementCalc            // Nuova colonna "ENHANCEMENT FEGATO"
+            };
 
             let activeBtn = document.querySelector('#container-roi-avanzato .btn-action');
             activeBtn.innerText = "Inviando...";
@@ -897,9 +917,9 @@
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(S)
+                body: JSON.stringify(payload)
             }).then(() => {
-                alert("Dati clinici ed Enhancement Epatico salvati con successo!");
+                alert("Dati clinici ed Enhancement Fegato salvati con successo!");
                 location.reload();
             }).catch(() => {
                 alert("Errore di trasmissione verso il server Google Fogli.");

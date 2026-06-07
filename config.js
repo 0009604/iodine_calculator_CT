@@ -25,7 +25,7 @@ const CONFIG = {
         sopra80: 5     
     },
 
-    // Configurazione studi vascolari CTA: Target IDR, Range di tolleranza, Volumi base (a 370 mgI/ml) e Floor di sicurezza
+    // Configurazione studi vascolari CTA
     ctaParametri: {
         "Willis/TSA":         { idrTarget: 1.3, rangeOk: [1.1, 1.6], baseVol: 45,  floor: 25 },
         "Polmonare":          { idrTarget: 1.4, rangeOk: [1.2, 1.7], baseVol: 50,  floor: 30 },
@@ -34,7 +34,7 @@ const CONFIG = {
         "Arti inferiori":     { idrTarget: 1.6, rangeOk: [1.3, 2.0], baseVol: 110, floor: 70 }
     },
 
-    // Sconti progressivi e conservativi per Angio-TC (CTA) basati sull'ottimizzazione del voltaggio
+    // Sconti progressivi e conservativi per Angio-TC (CTA)
     scontiCtaSECT: {
         120: 0.00,
         100: 0.08,
@@ -42,8 +42,10 @@ const CONFIG = {
         70:  0.32
     },
 
+    // Esteso il range fino a 140 keV per ricostruzione DECT
     scontiCtaDECT: {
-        120: 0.00, 115: 0.00, 110: 0.00, 105: 0.00, 100: 0.00,
+        140: 0.00, 135: 0.00, 130: 0.00, 125: 0.00, 120: 0.00, 
+        115: 0.00, 110: 0.00, 105: 0.00, 100: 0.00,
         95:  0.025, 90: 0.05, 85: 0.075, 80: 0.10, 75: 0.125,
         70:  0.15, 65: 0.185, 60: 0.22, 55: 0.26, 50: 0.30,
         45:  0.34, 40: 0.38

@@ -732,8 +732,9 @@
                 valAorta = document.getElementById('roi-aorta').value.trim();
                 valFegVen = document.getElementById('roi-feg-ven').value.trim();
 
-                if (valFegBaseM === "" || valFegBaseSd === "" || valAorta === "" || valFegVen === "") {
-                    alert("Impossibile procedere: compilare tutti e 4 i campi delle letture ROI prima di salvare l'esame BODY.");
+                // MODIFICA PRO: Blocca l'invio SOLO se TUTTI e 4 i campi sono vuoti.
+                if (valFegBaseM === "" && valFegBaseSd === "" && valAorta === "" && valFegVen === "") {
+                    alert("Impossibile procedere: inserire almeno un valore ROI prima di salvare l'esame BODY.");
                     return;
                 }
                 
@@ -749,10 +750,9 @@
                 }
             }
 
-            // Mappatura IDENTICA E PRECISA per Code.gs
             let payload = {
                 dataEsame: new Date().toLocaleDateString('it-IT'),
-                esame: S.tipoEsame, // "BODY" o "CTA"
+                esame: S.tipoEsame, 
                 distretto: S.distretto,
                 concentrazione: S.concentrazione,
                 flusso: S.flusso,
@@ -773,7 +773,7 @@
                 roiFegBasSd: valFegBaseSd,
                 roiFegVen: valFegVen,
                 enhancementFegato: enhancementCalc,
-                roiCta: huVasoTarget // HU per CTA
+                roiCta: huVasoTarget 
             };
 
             let activeBtn = S.tipoEsame === "CTA" ? document.querySelector('#container-roi-cta .btn-action') : document.querySelector('#container-roi-avanzato .btn-action');

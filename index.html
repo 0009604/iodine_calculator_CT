@@ -27,7 +27,6 @@
         .header-title { text-align: center; font-size: 28px; color: #fff; text-shadow: 0 0 12px var(--glow); margin-bottom: 5px; }
         .header-subtitle { text-align: center; color: var(--accent); font-size: 13px; font-weight: 600; margin-bottom: 25px; letter-spacing: 2px; }
 
-        /* CROSSOVER ANIMATION */
         .welcome-logo-wrapper { position: relative; display: flex; justify-content: center; align-items: center; width: 160px; height: 160px; margin-bottom: 25px; }
         @keyframes radar-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .radar-sweep { position: absolute; width: 170px; height: 170px; border-radius: 50%; background: conic-gradient(rgba(0,212,170,0.8) 0deg, transparent 70deg, transparent 360deg); z-index: 15; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
@@ -347,6 +346,11 @@
                         <div class="roi-field-row roi-fegato-base"><div class="metric-label" style="color:#0284c7; font-weight:700;">FEGATO BASALE (SD)</div><input type="number" id="roi-feg-bas-sd" class="roi-input-field" placeholder="SD"></div>
                         <div class="roi-field-row roi-aorta-tripode"><div class="metric-label" style="color:#dc2626; font-weight:700;">AORTA AL TRIPODE (HU)</div><input type="number" id="roi-aorta" class="roi-input-field" placeholder="HU"></div>
                         <div class="roi-field-row roi-fegato-venosa"><div class="metric-label" style="color:#16a34a; font-weight:700;">FEGATO VENOSA (HU)</div><input type="number" id="roi-feg-ven" class="roi-input-field" placeholder="HU"></div>
+                        
+                        <div class="roi-field-row" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); margin-top: 5px;">
+                            <div class="metric-label" style="color:var(--dim); font-weight:700;">NOTE OPZIONALI</div>
+                            <input type="text" id="note-esame-body" class="roi-input-field" style="width: 140px; text-align: left; font-size: 14px;" maxlength="20" placeholder="Max 20 car.">
+                        </div>
                     </div>
                 </div>
                 <button class="btn-action" onclick="inviaDatiCloud(true)">Invia e Salva nel Database 💾</button>
@@ -359,6 +363,11 @@
                         <div class="roi-field-row roi-cta-vaso">
                             <div class="metric-label" id="label-roi-vaso-cta" style="color:#ca8a04; font-weight:700; font-size:12px;">VASO (HU)</div>
                             <input type="number" id="roi-vaso-cta" class="roi-input-field" placeholder="HU">
+                        </div>
+                        
+                        <div class="roi-field-row" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); margin-top: 5px;">
+                            <div class="metric-label" style="color:var(--dim); font-weight:700;">NOTE OPZIONALI</div>
+                            <input type="text" id="note-esame-cta" class="roi-input-field" style="width: 140px; text-align: left; font-size: 14px;" maxlength="20" placeholder="Max 20 car.">
                         </div>
                     </div>
                 </div>
@@ -724,17 +733,18 @@
         function inviaDatiCloud(richiedeSalvataggioDati) {
             if (!richiedeSalvataggioDati) { location.reload(); return; }
 
-            let valFegBaseM = "", valFegBaseSd = "", valAorta = "", valFegVen = "", enhancementCalc = "", huVasoTarget = "";
+            let valFegBaseM = "", valFegBaseSd = "", valAorta = "", valFegVen = "", enhancementCalc = "", huVasoTarget = "", noteFinal = "";
 
             if (S.tipoEsame === "BODY") {
                 valFegBaseM = document.getElementById('roi-feg-bas-m').value.trim();
                 valFegBaseSd = document.getElementById('roi-feg-bas-sd').value.trim();
                 valAorta = document.getElementById('roi-aorta').value.trim();
                 valFegVen = document.getElementById('roi-feg-ven').value.trim();
+                noteFinal = document.getElementById('note-esame-body').value.trim();
 
-                // MODIFICA PRO: Blocca l'invio SOLO se TUTTI e 4 i campi sono vuoti.
+                // L'invio fallisce solo se TUTTI e 4 i campi sono vuoti. Inserirne 1, 2 o 3 è consentito.
                 if (valFegBaseM === "" && valFegBaseSd === "" && valAorta === "" && valFegVen === "") {
-                    alert("Impossibile procedere: inserire almeno un valore ROI prima di salvare l'esame BODY.");
+                    alert("Impossibile procedere: inserire almeno un valore ROI (es. Aorta o Fegato) prima di salvare l'esame BODY.");
                     return;
                 }
                 
@@ -744,6 +754,8 @@
             } 
             else if (S.tipoEsame === "CTA") {
                 huVasoTarget = document.getElementById('roi-vaso-cta').value.trim();
+                noteFinal = document.getElementById('note-esame-cta').value.trim();
+                
                 if (huVasoTarget === "") {
                     alert("Attenzione: Inserire il valore HU medio rilevato nel vaso target per salvare l'esame CTA.");
                     return;
@@ -773,7 +785,8 @@
                 roiFegBasSd: valFegBaseSd,
                 roiFegVen: valFegVen,
                 enhancementFegato: enhancementCalc,
-                roiCta: huVasoTarget 
+                roiCta: huVasoTarget,
+                note: noteFinal
             };
 
             let activeBtn = S.tipoEsame === "CTA" ? document.querySelector('#container-roi-cta .btn-action') : document.querySelector('#container-roi-avanzato .btn-action');

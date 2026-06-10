@@ -19,6 +19,7 @@ const CONFIG = {
     ctaParametri: {
         "Willis/TSA":         { idrTarget: 1.2, rangeOk: [1.0, 1.5], baseVol: 42,  floor: 20 },
         "Polmonare":          { idrTarget: 1.3, rangeOk: [1.1, 1.6], baseVol: 45,  floor: 25 },
+        "Cuore":              { idrTarget: 1.4, rangeOk: [1.2, 1.7], baseVol: 55,  floor: 30 },
         "Aorta toracica":     { idrTarget: 1.6, rangeOk: [1.4, 2.0], baseVol: 80,  floor: 50 },
         "Aorta toraco-add.":  { idrTarget: 1.6, rangeOk: [1.4, 2.0], baseVol: 90,  floor: 55 },
         "Arti inferiori":     { idrTarget: 1.5, rangeOk: [1.2, 1.8], baseVol: 100, floor: 60 }

@@ -27,5 +27,12 @@ const CONFIG = {
 
     // Riduzione mdc basata sui kVp/keV per CTA
     scontiCtaSECT: { 120: 0.00, 100: 0.08, 80: 0.20, 70: 0.32 },
-    scontiCtaDECT: { 140: 0.00, 130: 0.00, 120: 0.00, 100: 0.00, 70: 0.15, 50: 0.30, 40: 0.38 }
+    scontiCtaDECT: { 140: 0.00, 130: 0.00, 120: 0.00, 100: 0.00, 70: 0.15, 50: 0.30, 40: 0.38 },
+    
+    // Limiti di classificazione BMI
+    limitiBMI: {
+        sottopeso: 18.5,
+        normopeso: 25.0,
+        sovrappeso: 30.0
+    }
 };

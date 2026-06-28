@@ -372,7 +372,8 @@
             <div class="metric-grid" style="margin-bottom: 15px;">
                 <div class="metric-card"><div class="metric-label">Iodio Totale</div><div id="out-iodio-totale" class="metric-val">-- g</div></div>
                 <div class="metric-card"><div class="metric-label" id="lbl-dinamico-idr">IDR</div><div id="out-idr" class="metric-val">-- gI/s</div></div>
-                <div class="metric-card" id="card-lbw" style="grid-column: span 2;"><div class="metric-label">Massa Magra (LBW)</div><div id="out-lbw" class="metric-val">-- kg</div></div>
+                <div class="metric-card" id="card-lbw"><div class="metric-label">Massa Magra (LBW)</div><div id="out-lbw" class="metric-val">-- kg</div></div>
+                <div class="metric-card" id="card-bmi"><div class="metric-label">BMI</div><div id="out-bmi" class="metric-val" style="font-size: 14px; white-space: pre-line; line-height: 1.2;">--</div></div>
             </div>
 
             <div id="container-roi-avanzato" style="display: none; margin-bottom: 10px;">
@@ -688,7 +689,16 @@
                 document.getElementById('out-stringa-iniettore').style.display = "block";
                 document.getElementById('out-stringa-split-cta').style.display = "none";
                 document.getElementById('card-lbw').style.display = "block"; 
+                document.getElementById('card-bmi').style.display = "block"; 
                 document.getElementById('container-roi-cta').style.display = "none";
+                
+                let altezzaM = S.altezza / 100;
+                S.bmi = S.peso / (altezzaM * altezzaM);
+                S.bmiCat = "Obesità";
+                if (S.bmi < CONFIG.limitiBMI.sottopeso) S.bmiCat = "Sottopeso";
+                else if (S.bmi < CONFIG.limitiBMI.normopeso) S.bmiCat = "Normopeso";
+                else if (S.bmi < CONFIG.limitiBMI.sovrappeso) S.bmiCat = "Sovrappeso";
+                document.getElementById('out-bmi').innerText = `${S.bmi.toFixed(1)}\n${S.bmiCat}`;
 
                 let tilTarget = CONFIG.tilParametri[S.distretto] || 600; 
                 let volumeMdcLBW = (tilTarget * S.lbw) / S.concentrazione;
@@ -721,6 +731,7 @@
                 document.getElementById('container-roi-avanzato').style.display = "none";
                 document.getElementById('container-roi-standard').style.display = "none";
                 document.getElementById('card-lbw').style.display = "none"; 
+                document.getElementById('card-bmi').style.display = "none"; 
 
                 document.getElementById('label-roi-vaso-cta').innerText = mappaVasiCTA[S.distretto] || "VASO TARGET (HU)";
                 document.getElementById('container-roi-cta').style.display = "block";
@@ -824,6 +835,7 @@
                 scansione: S.scan,
                 ricostruzione: S.tipoEsame === "BODY" ? (S.ric === "Iterative" ? "HIR" : "DLR") : "",
                 lbw: S.tipoEsame === "BODY" ? S.lbw.toFixed(1) : "",
+                bmi: S.tipoEsame === "BODY" ? `${S.bmi.toFixed(1)} - ${S.bmiCat}` : "",
                 volume: S.volume,
                 idr: S.idr.toFixed(2),
                 iodioTot: S.iodio.toFixed(1),

@@ -835,7 +835,7 @@
                 scansione: S.scan,
                 ricostruzione: S.tipoEsame === "BODY" ? (S.ric === "Iterative" ? "HIR" : "DLR") : "",
                 lbw: S.tipoEsame === "BODY" ? S.lbw.toFixed(1) : "",
-                bmi: S.tipoEsame === "BODY" ? `${S.bmi.toFixed(1)} - ${S.bmiCat}` : "",
+                bmi: S.tipoEsame === "BODY" ? S.bmi.toFixed(1) : "",
                 volume: S.volume,
                 idr: S.idr.toFixed(2),
                 iodioTot: S.iodio.toFixed(1),
